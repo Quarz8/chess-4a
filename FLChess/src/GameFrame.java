@@ -289,9 +289,10 @@ class GamePanel extends JPanel
             }
 
             // kings and queens
-            // need an actual algorithm for these guys, A* search specifically.
+            // need an actual algorithm for these guys (3 spaces any direction), A* search specifically.
             
             // knights
+            // same algorithm can be used, just with a larger range (5 spaces any direction)
 
             System.out.println("handleSelection called, selectedTile found"
                     + " so this is selectedTile2, performing move and resetting");
