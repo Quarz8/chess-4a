@@ -63,6 +63,8 @@ public class GameFrame extends JFrame implements ActionListener
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationByPlatform(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setResizable(false);
         setVisible(true);
     }
 
