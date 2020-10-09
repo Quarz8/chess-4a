@@ -62,8 +62,8 @@ public class GameFrame extends JFrame implements ActionListener
         add(howTo, BorderLayout.WEST);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
-        setLocationByPlatform(true);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocation(0,0);
+        setSize(1240,900);
         setResizable(false);
         setVisible(true);
     }
