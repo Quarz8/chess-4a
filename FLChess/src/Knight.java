@@ -1,5 +1,7 @@
 public class Knight extends Piece
 {
+	boolean hasMoved = false;
+	
 	public Knight(boolean white, int x, int y)
     {
     	super(white, x, y);
