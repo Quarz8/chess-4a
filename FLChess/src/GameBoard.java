@@ -1,19 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Jacob Freeland
- */
 public class GameBoard
 {
     Piece tiles[][] = new Piece[8][8];
+    int actionsTaken = 0;
     boolean whiteMoving;
     
-    final static Piece INITIAL_SETUP[][] =
+    final int ACTIONS_PER_TURN = 3;
+    final Piece INITIAL_SETUP[][] =
     {
         {
             new Rook(false), new Knight(false), new Bishop(false),
