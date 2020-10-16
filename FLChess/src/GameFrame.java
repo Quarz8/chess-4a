@@ -49,12 +49,13 @@ public class GameFrame extends JFrame implements ActionListener
         mainPanel.add(menu, "menu");
         mainPanel.add(game, "game");
 
-        goGame = new JButton("PLAY");
-        goGame.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        goGame = new JButton();
+        goGame.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Play Button.png")));
         goGame.addActionListener(this);
 
-        howTo = new JButton("HOW TO PLAY");
-        howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        howTo = new JButton();
+        howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
+        //howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
         howTo.addActionListener(this);
 
         add(mainPanel);
@@ -138,23 +139,23 @@ class MenuPanel extends JPanel
 {
     public MenuPanel()
     {
-        setBackground(new Color(136, 189, 183));
+        setBackground(new Color(255, 255, 255));
         setLayout(new GridLayout(2, 0));
 
         // LOGO
-        JLabel logoImage = new JLabel("LOGO HERE", SwingConstants.CENTER);
-        logoImage.setIcon(null);
-        logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
+        JLabel logoImage = new JLabel();
+        logoImage.setIcon (new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
+        //logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
         logoImage.setVerticalAlignment(SwingConstants.CENTER);
         logoImage.setHorizontalAlignment(SwingConstants.CENTER);
         add(logoImage);
 
         // TEAM NAME
-        JLabel teamName = new JLabel("Team 4A");
-        teamName.setFont(new Font("Tahoma", Font.PLAIN, 44));
-        teamName.setVerticalAlignment(SwingConstants.CENTER);
-        teamName.setHorizontalAlignment(SwingConstants.CENTER);
-        add(teamName);
+        //JLabel teamName = new JLabel("Team 4A");
+        //teamName.setFont(new Font("Tahoma", Font.PLAIN, 44));
+        //teamName.setVerticalAlignment(SwingConstants.CENTER);
+        //teamName.setHorizontalAlignment(SwingConstants.CENTER);
+        //add(teamName);
     }
 
     @Override
@@ -322,86 +323,74 @@ class GamePanel extends JPanel
         switch (pieceRep)
         {
         case 'r':
-            lblTemp = new JLabel("black rook");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Rook
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Rook Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'b':
-            lblTemp = new JLabel("black bishop");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Bishop
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Bishop Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'n':
-            lblTemp = new JLabel("black knight");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight
-            // piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'q':
-            lblTemp = new JLabel("black queen");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'k':
-            lblTemp = new JLabel("black king");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/King
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/King Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'p':
-            lblTemp = new JLabel("black pawn");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Pawn
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Pawn Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'R':
-            lblTemp = new JLabel("white rook");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Rook Piece
-            // White.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Rook Piece White.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'B':
-            lblTemp = new JLabel("white bishop");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Bishop
-            // Piece white.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Bishop Piece white.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'N':
-            lblTemp = new JLabel("white knight");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight
-            // piece white.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight piece white.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'Q':
-            lblTemp = new JLabel("white queen");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen Piece
-            // White.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen Piece White.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
-            lblTemp.setVerticalAlignment(SwingConstants.CENTER);
+            lblTemp. setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'K':
-            lblTemp = new JLabel("white king");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/King
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/King Piece white.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'P':
             lblTemp = new JLabel("white pawn");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Pawn Piece
-            // white.png")));
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Pawn Piece white.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
