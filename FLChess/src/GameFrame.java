@@ -54,7 +54,7 @@ public class GameFrame extends JFrame implements ActionListener
         goGame.addActionListener(this);
 
         howTo = new JButton();
-        howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
+//        howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
         //howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
         howTo.addActionListener(this);
 
@@ -117,6 +117,7 @@ public class GameFrame extends JFrame implements ActionListener
     {
         cardLayout.show(mainPanel, "game");
         game.updateBoard(new GameBoard());
+        game.gBoard.toSysOut();
     }
 
     // FINAL SET UP (MAIN METHOD)
@@ -142,13 +143,13 @@ class MenuPanel extends JPanel
         setBackground(new Color(255, 255, 255));
         setLayout(new GridLayout(2, 0));
 
-        // LOGO
-        JLabel logoImage = new JLabel();
-        logoImage.setIcon (new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
-        //logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
-        logoImage.setVerticalAlignment(SwingConstants.CENTER);
-        logoImage.setHorizontalAlignment(SwingConstants.CENTER);
-        add(logoImage);
+//        // LOGO
+//        JLabel logoImage = new JLabel();
+//        logoImage.setIcon (new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
+//        //logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
+//        logoImage.setVerticalAlignment(SwingConstants.CENTER);
+//        logoImage.setHorizontalAlignment(SwingConstants.CENTER);
+//        add(logoImage);
 
         // TEAM NAME
         //JLabel teamName = new JLabel("Team 4A");
@@ -207,7 +208,7 @@ class GamePanel extends JPanel
         {
             for (int y = 0; y < pnlChessCells[0].length; y++)
             {
-                pnlChessCells[x][y].removeAll();
+            	pnlChessCells[x][y].removeAll();
                 pnlChessCells[x][y].add(this.getPieceObject(gBoard.tiles[x][y].charRep), BorderLayout.CENTER);
                 pnlChessCells[x][y].validate();
                 pnlChessCells[x][y].repaint();
@@ -223,7 +224,7 @@ class GamePanel extends JPanel
         int newYLoc = newLoc[1];
 
         // must not have selected a tile already
-        if (selectedTile.x == -1)
+        if (selectedTile.pieceAt.x == NULL_TILE.pieceAt.x)
         {
             // if empty tile/null piece, do nothing and break out
             if (gBoard.tiles[newYLoc][newXLoc].charRep == '-')
@@ -231,13 +232,13 @@ class GamePanel extends JPanel
                 System.out.println("not a piece. must select piece first");
                 return;
             }
-            System.out.println(newTile.getComponentCount() + "handleSelection called, no previously selected"
+            System.out.println("handleSelection called, no previously selected"
                     + " tile found so this is selectedTile");
 
             // save selected tile
             selectedTile = newTile;
         }
-        else if (selectedTile2.x == -1)
+        else if (selectedTile2.pieceAt.x == NULL_TILE.pieceAt.x)
         {
             // check if destination is open
             if (gBoard.tiles[newYLoc][newXLoc].charRep != '-')
@@ -299,9 +300,9 @@ class GamePanel extends JPanel
                     + " so this is selectedTile2, performing move and resetting");
             selectedTile2 = newTile;
             int[] before =
-            { selectedTile.x, selectedTile.y };
+            { selectedTile.pieceAt.x, selectedTile.pieceAt.y };
             int[] after =
-            { selectedTile2.x, selectedTile2.y };
+            { selectedTile2.pieceAt.x, selectedTile2.pieceAt.y };
             gBoard.movePiece(before, after);
             this.updateBoard(gBoard);
             selectedTile = NULL_TILE;
@@ -404,30 +405,35 @@ class GamePanel extends JPanel
 
 class TilePanel extends JPanel implements MouseListener
 {
-    GamePanel parent;
-    int x;
-    int y;
+	GamePanel parent;
+    Piece pieceAt;
 
     public TilePanel(GamePanel parent, LayoutManager layout)
     {
+    	this.parent = parent;
         addMouseListener(this);
         this.setLayout(layout);
-        this.parent = parent;
     }
 
     public TilePanel(int x, int y, GamePanel parent, LayoutManager layout)
     {
+    	this.parent = parent;
         addMouseListener(this);
         this.setLayout(layout);
-        this.parent = parent;
-        this.x = x;
-        this.y = y;
+        try
+        {
+            this.pieceAt = parent.gBoard.tiles[x][y];
+        } catch (ArrayIndexOutOfBoundsException e)
+        //in the case of NULL_TILE, with position (-1, -1)
+        {
+        	this.pieceAt = new NullPiece(-1, -1);
+        }
     }
 
     public int[] getBoardLoc()
     {
         int[] loc =
-        { x, y };
+        { pieceAt.x, pieceAt.y };
         return loc;
     }
 
@@ -440,7 +446,6 @@ class TilePanel extends JPanel implements MouseListener
     @Override
     public void mousePressed(MouseEvent e)
     {
-        System.out.println("mousePressed called by tile at (" + x + ", " + y + ")");
         parent.handleSelection(this);
     }
 

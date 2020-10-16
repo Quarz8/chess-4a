@@ -1,8 +1,8 @@
 public class NullPiece extends Piece
 {
-    public NullPiece()
+	public NullPiece(int x, int y)
     {
-        this.white = true;
-        this.charRep = '-';
+    	super(true, x, y);
+    	this.charRep = '-';
     }
 }

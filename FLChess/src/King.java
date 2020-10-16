@@ -1,14 +1,13 @@
 public class King extends Piece
 {
-    public King()
+	public King(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'K';
+    	super(white, x, y);
+    	this.charRep = (white ? 'K' : 'k');
     }
-    
-    public King(boolean white)
+	
+	public King(boolean white)
     {
-        this.white = white;
-        this.charRep = (white ? 'K' : 'k');
+    	super(white);
     }
 }

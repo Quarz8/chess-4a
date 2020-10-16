@@ -1,14 +1,13 @@
 public class Queen extends Piece
 {
-    public Queen()
+	public Queen(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'Q';
+    	super(white, x, y);
+    	this.charRep = (white ? 'Q' : 'q');
     }
-    
-    public Queen(boolean white)
+	
+	public Queen(boolean white)
     {
-        this.white = white;
-        this.charRep = (white ? 'Q' : 'q');
+    	super(white);
     }
 }

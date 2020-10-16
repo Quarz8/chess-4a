@@ -4,15 +4,14 @@ public class Rook extends Piece
 	final int ATTACK_RANGE = 3;
 	final int[] MIN_ROLL_TO_CAP = {4, 4, 5, 5, 6, 5};
 	
-    public Rook()
+	public Rook(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'R';
+    	super(white, x, y);
+    	this.charRep = (white ? 'R' : 'r');
     }
-    
-    public Rook(boolean white)
+	
+	public Rook(boolean white)
     {
-        this.white = white;
-        this.charRep = (white ? 'R' : 'r');
+    	super(white);
     }
 }

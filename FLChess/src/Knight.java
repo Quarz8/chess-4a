@@ -1,14 +1,13 @@
 public class Knight extends Piece
 {
-    public Knight()
+	public Knight(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'N';
+    	super(white, x, y);
+    	this.charRep = (white ? 'N' : 'n');
     }
-    
-    public Knight(boolean white)
+	
+	public Knight(boolean white)
     {
-        this.white = white;
-        this.charRep = (white ? 'N' : 'n');
+    	super(white);
     }
 }

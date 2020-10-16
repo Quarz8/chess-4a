@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Pawn extends Piece
 {
 	final int MOVEMENT_RANGE = 1;
@@ -5,15 +7,20 @@ public class Pawn extends Piece
 	final int[] MIN_ROLL_TO_CAP = {6, 6, 6, 5, 6, 4};
     boolean hasMoved = false;
     
-    public Pawn()
+    public Pawn(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'P';
+    	super(white, x, y);
+    	this.charRep = (white ? 'P' : 'p');
     }
     
     public Pawn(boolean white)
     {
-        this.white = white;
-        this.charRep = (white ? 'P' : 'p');
+    	super(white);
+    }
+    
+    public ArrayList<Move> searchValidMoves(int x, int y, int range)
+    {
+    	ArrayList<Move> moveSeq = new ArrayList<Move>();
+		return moveSeq;
     }
 }
