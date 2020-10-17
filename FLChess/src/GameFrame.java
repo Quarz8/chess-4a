@@ -201,11 +201,6 @@ class GamePanel extends JPanel
             {
                 pnlChessCells[row][column] = new TilePanel(this, new BorderLayout());
                 this.add(pnlChessCells[row][column]);
-
-                if ((column + row) % 2 == 0)
-                    pnlChessCells[row][column].setBackground(LIGHT_COLOR);
-                else
-                    pnlChessCells[row][column].setBackground(DARK_COLOR);
             }
         }
     }
@@ -231,10 +226,20 @@ class GamePanel extends JPanel
             }
         }
         
+        //highlighting tiles here
+        if (selectedTile.pieceAt.charRep != new NullPiece().charRep)
+        {
+        	pnlChessCells[selectedTile.pieceAt.row][selectedTile.pieceAt.column].setBackground(SELECT_COLOR);
+        }
         for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
         {
         	int[] highlightPos = iterator.next();
         	pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(MOVE_COLOR);
+        }
+        for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
+        {
+        	int[] highlightPos = iterator.next();
+        	pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(ATTACK_COLOR);
         }
     }
 
@@ -258,7 +263,8 @@ class GamePanel extends JPanel
 
             // save selected tile
             selectedTile = newTile;
-            highlightedMoveTiles = newTile.pieceAt.searchValidMoves(gBoard.tiles, newTile.pieceAt.directions);
+            highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, newTile.pieceAt.movementRange, true);
+            highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, newTile.pieceAt.attackRange, false);
             
         }
         else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
@@ -269,14 +275,14 @@ class GamePanel extends JPanel
             
             for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
             {
-            	if (Arrays.equals(newLoc, iterator.next())) //valid move
+            	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted move tile
                 {
                 	gBoard.movePiece(prevLoc, newLoc);
                 }
             }
             for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
             {
-            	if (Arrays.equals(newLoc, iterator.next())) //valid attack
+            	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted attack tile
                 {
                 	//TODO handle attack behavior here
                 }
