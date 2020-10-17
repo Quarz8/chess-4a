@@ -3,6 +3,7 @@ import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
@@ -33,26 +34,45 @@ import javax.swing.SwingUtilities;
 public class GameFrame extends JFrame implements ActionListener
 {
     CardLayout cardLayout;
+    FlowLayout flowLayout;
     JPanel mainPanel;
+    JPanel controlPanel;
     MenuPanel menu;
     GamePanel game;
     JButton goGame;
     JButton howTo;
+    JButton moveButton;
+    JButton attackButton;
     ImageIcon instruct = new ImageIcon("Images/medChess-1.jpg");
 
     String longMessage;
 
-    // GAME FRAME FOR OVERALL SET UP (UNIVERSAL
-    // BUTTONS)////////////////////////////////////////////////////////////////////////////////////////
+    // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
     {
+        //INITIALIZATION OF CARD LAYOUT STYLE FOR THE MAIN PANEL AND FLOW LAYOUT STYLE FOR CONTROL PANEL -- THE MENU/GAME PANELS CONTAINED IN MAIN PANEL
         cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+        flowLayout = new FlowLayout(SwingConstants.LEFT);
+        
         menu = new MenuPanel();
         game = new GamePanel();
+        
+        mainPanel = new JPanel(cardLayout);
         mainPanel.add(menu, "menu");
         mainPanel.add(game, "game");
 
+        //MOVE AND ATTACK BUTTONS (HIDDEN UNTIL GAME PANEL IS SHOWN) -- THESE ARE ADDED TO THE CONTROL PANEL
+    	moveButton = new JButton("MOVE");
+    	moveButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
+    	moveButton.setPreferredSize(new Dimension(493,100));
+    	moveButton.addActionListener(this);
+    	
+    	attackButton = new JButton("ATTACK");
+    	attackButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
+    	attackButton.setPreferredSize(new Dimension(493,100));;
+    	attackButton.addActionListener(this);
+
+    	//HOW TO PLAY AND PLAY BUTTONS 
         goGame = new JButton();
         goGame.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Play Button.png")));
         goGame.addActionListener(this);
@@ -62,12 +82,23 @@ public class GameFrame extends JFrame implements ActionListener
         //howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
         howTo.addActionListener(this);
 
+        //CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START)
+    	controlPanel = new JPanel(flowLayout);
+    	controlPanel.add(moveButton);
+    	controlPanel.add(attackButton);
+
+        //PUSH COMPONENTS TO GAMEFRAME (JFRAME)
         add(mainPanel);
         add(goGame, BorderLayout.EAST);
         add(howTo, BorderLayout.WEST);
+        add(controlPanel, BorderLayout.SOUTH);
+    	controlPanel.setVisible(false);
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
-        setLocationByPlatform(true);
+        setLocation(0,0);
+        setSize(1240,900);
+        setResizable(false);
         setVisible(true);
     }
 
@@ -114,12 +145,33 @@ public class GameFrame extends JFrame implements ActionListener
 
             JOptionPane.showMessageDialog(null, longMessage, "How To Play", JOptionPane.INFORMATION_MESSAGE, instruct);
         }
+        else if (e.getSource() == moveButton)
+        {
+        	//SHOWS CHANGE IN STATE TO MOVE GAMEPLAY
+        	attackButton.setBackground(null);
+        	attackButton.setForeground(Color.black);
+        	moveButton.setBackground(new Color(136, 0, 27));
+        	moveButton.setForeground(Color.white);
+        	
+        	//MOVEMENT STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
+        }
+        else if (e.getSource() == attackButton)
+        {
+        	//SHOWS CHANGE IN STATE TO ATTACK GAMEPLAY
+        	moveButton.setBackground(null);
+        	moveButton.setForeground(Color.black);
+        	attackButton.setBackground(new Color(136, 0, 27));
+        	attackButton.setForeground(Color.white);
+        	
+        	//ATTACKING STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
+        }
     }
 
     // SWITCH TO ACTUAL GAME PANEL
     public void gameOn()
     {
         cardLayout.show(mainPanel, "game");
+        controlPanel.setVisible(true);
         game.updateBoard(new GameBoard());
         game.gBoard.toSysOut();
     }
@@ -138,8 +190,7 @@ public class GameFrame extends JFrame implements ActionListener
     }
 }
 
-// MAIN MENU
-// PANEL//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MAIN MENU PANEL/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MenuPanel extends JPanel
 {
     public MenuPanel()
@@ -170,8 +221,7 @@ class MenuPanel extends JPanel
     }
 }
 
-// ACTUAL GAMEPLAY
-// PANEL///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ACTUAL GAMEPLAY PANEL////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GamePanel extends JPanel
 {
     GameBoard gBoard = new GameBoard();
