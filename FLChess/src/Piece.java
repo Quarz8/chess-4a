@@ -16,17 +16,17 @@ public abstract class Piece
 	int column;
     boolean white;
     char charRep;
-    final int[][] DIRECTIONS =
-		{
-				{0, 1}, //N
-				{1, 1}, //NE
-				{1, 0}, //E
-				{1, -1}, //SE
-				{0, -1}, //S
-				{-1, -1}, //SW
-				{-1, 0}, //W
-				{-1, 1} //NW
-		};
+    int[][] directions =
+	{
+			{0, 1}, //N
+			{1, 1}, //NE
+			{1, 0}, //E
+			{1, -1}, //SE
+			{0, -1}, //S
+			{-1, -1}, //SW
+			{-1, 0}, //W
+			{-1, 1} //NW
+	};
     
     public Piece(boolean white, int row, int column)
     {

@@ -8,13 +8,4 @@ public class Queen extends Piece
     	this.minRollToCap = new int[] {4, 4, 4, 4, 5, 2};
     	this.charRep = (white ? 'Q' : 'q');
     }
-	
-	public Queen(boolean white)
-    {
-    	super(white);
-    	this.movementRange = 3;
-    	this.attackRange = 1;
-    	this.minRollToCap = new int[] {4, 4, 4, 4, 5, 2};
-    	this.charRep = (white ? 'Q' : 'q');
-    }
 }

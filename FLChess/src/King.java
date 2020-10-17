@@ -8,10 +8,4 @@ public class King extends Piece
     	this.minRollToCap = new int[] {4, 4, 4, 4, 5, 1};
     	this.charRep = (white ? 'K' : 'k');
     }
-	
-	public King(boolean white)
-    {
-    	super(white);
-    	this.charRep = (white ? 'K' : 'k');
-    }
 }

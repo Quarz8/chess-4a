@@ -244,8 +244,8 @@ class GamePanel extends JPanel
         int[] newLoc = newTile.getBoardLoc();
     	gBoard.tiles[newLoc[0]][newLoc[1]].toSysOut();
 
-        // must not have selected a tile already
         if (selectedTile.pieceAt.charRep == new NullPiece().charRep)
+        	//HANDLING FIRST SELECTION
         {
             // if empty tile/null piece, do nothing and break out
             if (gBoard.tiles[newLoc[0]][newLoc[1]].charRep == '-')
@@ -258,10 +258,11 @@ class GamePanel extends JPanel
 
             // save selected tile
             selectedTile = newTile;
-            highlightedMoveTiles = newTile.pieceAt.searchValidMoves(gBoard.tiles, newTile.pieceAt.DIRECTIONS);
+            highlightedMoveTiles = newTile.pieceAt.searchValidMoves(gBoard.tiles, newTile.pieceAt.directions);
             
         }
         else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
+        	//HANDLING SECOND SELECTION
         {
             // check if destination is open
             if (gBoard.tiles[newLoc[0]][newLoc[1]].charRep != '-')
