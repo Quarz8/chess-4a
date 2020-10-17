@@ -10,7 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.Icon;
@@ -174,29 +178,34 @@ class GamePanel extends JPanel
     TilePanel[][] pnlChessCells = new TilePanel[gBoard.tiles.length][gBoard.tiles[0].length];
     TilePanel selectedTile;
     TilePanel selectedTile2;
+    Collection<int[]> highlightedMoveTiles = new ArrayList<>();
+    Collection<int[]> highlightedAttackTiles = new ArrayList<>();
     final Color DARK_COLOR = new Color(136, 0, 27);
     final Color LIGHT_COLOR = new Color(255, 206, 158);
-    final Color SELECT_COLOR = new Color(24, 39, 64);
-    final TilePanel NULL_TILE = new TilePanel(-1, -1, this, new BorderLayout());
+    final Color SELECT_COLOR = new Color(78, 245, 98);
+    final Color MOVE_COLOR = new Color(122, 77, 201);
+    final Color ATTACK_COLOR = new Color(184, 35, 9);
+    final TilePanel NULL_TILE = new TilePanel(this, new BorderLayout());
 
     public GamePanel()
     {
         setLayout(new GridLayout(pnlChessCells.length, pnlChessCells[0].length));
+        NULL_TILE.pieceAt = new NullPiece();
         this.selectedTile = NULL_TILE;
         this.selectedTile2 = NULL_TILE;
 
         // CREATE BOARD IN GAME PANEL CONSTRUCTOR
-        for (int y = 0; y < pnlChessCells.length; y++)
+        for (int row = 0; row < pnlChessCells.length; row++)
         {
-            for (int x = 0; x < pnlChessCells[0].length; x++)
+            for (int column = 0; column < pnlChessCells[0].length; column++)
             {
-                pnlChessCells[y][x] = new TilePanel(x, y, this, new BorderLayout());
-                this.add(pnlChessCells[y][x]);
+                pnlChessCells[row][column] = new TilePanel(this, new BorderLayout());
+                this.add(pnlChessCells[row][column]);
 
-                if ((x + y) % 2 == 0)
-                    pnlChessCells[y][x].setBackground(LIGHT_COLOR);
+                if ((column + row) % 2 == 0)
+                    pnlChessCells[row][column].setBackground(LIGHT_COLOR);
                 else
-                    pnlChessCells[y][x].setBackground(DARK_COLOR);
+                    pnlChessCells[row][column].setBackground(DARK_COLOR);
             }
         }
     }
@@ -204,15 +213,28 @@ class GamePanel extends JPanel
     public void updateBoard(GameBoard gBoard)
     {
         // PLACE PIECES ON BOARD IN GAME PANEL CONSTRUCTOR
-        for (int x = 0; x < pnlChessCells.length; x++)
+        for (int row = 0; row < pnlChessCells.length; row++)
         {
-            for (int y = 0; y < pnlChessCells[0].length; y++)
+            for (int column = 0; column < pnlChessCells[0].length; column++)
             {
-            	pnlChessCells[x][y].removeAll();
-                pnlChessCells[x][y].add(this.getPieceObject(gBoard.tiles[x][y].charRep), BorderLayout.CENTER);
-                pnlChessCells[x][y].validate();
-                pnlChessCells[x][y].repaint();
+            	pnlChessCells[row][column].removeAll();
+                pnlChessCells[row][column].add(this.getPieceObject(gBoard.tiles[row][column].charRep), BorderLayout.CENTER);
+                pnlChessCells[row][column].pieceAt = gBoard.tiles[row][column];
+                
+                if ((column + row) % 2 == 0)
+                    pnlChessCells[row][column].setBackground(LIGHT_COLOR);
+                else
+                    pnlChessCells[row][column].setBackground(DARK_COLOR);
+                
+                pnlChessCells[row][column].validate();
+                pnlChessCells[row][column].repaint();
             }
+        }
+        
+        for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
+        {
+        	int[] highlightPos = iterator.next();
+        	pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(MOVE_COLOR);
         }
     }
 
@@ -220,14 +242,13 @@ class GamePanel extends JPanel
     {
         // new tile information
         int[] newLoc = newTile.getBoardLoc();
-        int newXLoc = newLoc[0];
-        int newYLoc = newLoc[1];
+    	gBoard.tiles[newLoc[0]][newLoc[1]].toSysOut();
 
         // must not have selected a tile already
-        if (selectedTile.pieceAt.x == NULL_TILE.pieceAt.x)
+        if (selectedTile.pieceAt.charRep == new NullPiece().charRep)
         {
             // if empty tile/null piece, do nothing and break out
-            if (gBoard.tiles[newYLoc][newXLoc].charRep == '-')
+            if (gBoard.tiles[newLoc[0]][newLoc[1]].charRep == '-')
             {
                 System.out.println("not a piece. must select piece first");
                 return;
@@ -237,11 +258,13 @@ class GamePanel extends JPanel
 
             // save selected tile
             selectedTile = newTile;
+            highlightedMoveTiles = newTile.pieceAt.searchValidMoves(gBoard.tiles, newTile.pieceAt.DIRECTIONS);
+            
         }
-        else if (selectedTile2.pieceAt.x == NULL_TILE.pieceAt.x)
+        else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
         {
             // check if destination is open
-            if (gBoard.tiles[newYLoc][newXLoc].charRep != '-')
+            if (gBoard.tiles[newLoc[0]][newLoc[1]].charRep != '-')
             {
                 System.out.println("this isnt an attack, space is occupied");
                 selectedTile = NULL_TILE; // reset all selected tiles
@@ -250,64 +273,16 @@ class GamePanel extends JPanel
 
             // info of previously selected tile
             int[] prevLoc = selectedTile.getBoardLoc();
-            int prevXLoc = prevLoc[0];
-            int prevYLoc = prevLoc[1];
-
-            // rules for moving previously selected piece...
-            // white pawns and bishops
-            if (gBoard.tiles[prevYLoc][prevXLoc].charRep == 'P' || gBoard.tiles[prevYLoc][prevXLoc].charRep == 'B')
-            {
-                if ((newYLoc >= prevYLoc || newYLoc < prevYLoc - 1)
-                        || (newXLoc > prevXLoc + 1 || newXLoc < prevXLoc - 1)) // only forward by 1
-                {
-                    System.out.println("invalid move noob");
-                    selectedTile = NULL_TILE; // reset all selected tiles
-                    return;
-                }
-            }
-
-            // black pawns and bishops
-            if (gBoard.tiles[prevYLoc][prevXLoc].charRep == 'p' || gBoard.tiles[prevYLoc][prevXLoc].charRep == 'b')
-            {
-                if ((newYLoc <= prevYLoc || newYLoc > prevYLoc + 1)
-                        || (newXLoc > prevXLoc + 1 || newXLoc < prevXLoc - 1)) // only forward by 1
-                {
-                    System.out.println("invalid move noob");
-                    selectedTile = NULL_TILE; // reset all selected tiles
-                    return;
-                }
-            }
-
-            // rooks
-            if (gBoard.tiles[prevYLoc][prevXLoc].charRep == 'r' || gBoard.tiles[prevYLoc][prevXLoc].charRep == 'R')
-            {
-                if (newYLoc > prevYLoc + 1 || newYLoc < prevYLoc - 1 || newXLoc > prevXLoc + 1
-                        || newXLoc < prevXLoc - 1) // only by 1
-                {
-                    System.out.println("invalid move noob");
-                    selectedTile = NULL_TILE; // reset all selected tiles
-                    return;
-                }
-            }
-
-            // kings and queens
-            // need an actual algorithm for these guys (3 spaces any direction), A* search specifically.
             
-            // knights
-            // same algorithm can be used, just with a larger range (5 spaces any direction)
-
-            System.out.println("handleSelection called, selectedTile found"
-                    + " so this is selectedTile2, performing move and resetting");
-            selectedTile2 = newTile;
-            int[] before =
-            { selectedTile.pieceAt.x, selectedTile.pieceAt.y };
-            int[] after =
-            { selectedTile2.pieceAt.x, selectedTile2.pieceAt.y };
-            gBoard.movePiece(before, after);
-            this.updateBoard(gBoard);
+            gBoard.movePiece(prevLoc, newLoc);
+            
+            //reset selections, highlights
             selectedTile = NULL_TILE;
             selectedTile2 = NULL_TILE;
+            highlightedMoveTiles.clear();
         }
+
+        this.updateBoard(gBoard);
     }
 
     @Override
@@ -415,25 +390,10 @@ class TilePanel extends JPanel implements MouseListener
         this.setLayout(layout);
     }
 
-    public TilePanel(int x, int y, GamePanel parent, LayoutManager layout)
-    {
-    	this.parent = parent;
-        addMouseListener(this);
-        this.setLayout(layout);
-        try
-        {
-            this.pieceAt = parent.gBoard.tiles[x][y];
-        } catch (ArrayIndexOutOfBoundsException e)
-        //in the case of NULL_TILE, with position (-1, -1)
-        {
-        	this.pieceAt = new NullPiece(-1, -1);
-        }
-    }
-
     public int[] getBoardLoc()
     {
         int[] loc =
-        { pieceAt.x, pieceAt.y };
+        { pieceAt.row, pieceAt.column };
         return loc;
     }
 

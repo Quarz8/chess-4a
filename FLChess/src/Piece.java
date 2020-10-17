@@ -5,14 +5,18 @@ import java.util.Queue;
 
 public abstract class Piece
 {
-	final int MOVEMENT_RANGE = 0;
-	final int ATTACK_RANGE = 0;
-	final int[] MIN_ROLL_TO_CAPTURE = {7, 7, 7, 7, 7, 7};
+	int movementRange;
+	int attackRange;
+	int[] minRollToCap;
 		//in reading order for each row on the chart in the PDF. the minimum
 		//die roll for this piece to capture a king, queen, knight, bishop,
 		//rook, and pawn, respectively. should be initialized by each
 		//individual piece, so this exact array shouldn't manifest in working code.
-	final int[][] DIRECTIONS =
+	int row;
+	int column;
+    boolean white;
+    char charRep;
+    final int[][] DIRECTIONS =
 		{
 				{0, 1}, //N
 				{1, 1}, //NE
@@ -23,16 +27,12 @@ public abstract class Piece
 				{-1, 0}, //W
 				{-1, 1} //NW
 		};
-	int x;
-	int y;
-    boolean white;
-    char charRep;
     
-    public Piece(boolean white, int x, int y)
+    public Piece(boolean white, int row, int column)
     {
     	this.white = white;
-    	this.x = x;
-    	this.y = y;
+    	this.row = row;
+    	this.column = column;
     }
     
     public Piece(boolean white)
@@ -40,36 +40,48 @@ public abstract class Piece
     	this.white = white;
     }
     
-    public Collection<int[]> searchValidMoves(int[][] directions)
+    public Piece()
+    {
+    	
+    }
+    
+    public Collection<int[]> searchValidMoves(Piece[][] tiles, int[][] directions)
     //takes a set of allowed directions (presumably DIRECTIONS).
     //searches for any tiles bordering its current position, then repeats
-    //for MOVEMENT_RANGE > 1.
-    //ARRAYINDEXOUTOFBOUNDSEXCEPTION IS NOT ENFORCED INSIDE THIS METHOD.
-    //wherever you handle the resulting Collection<int[]>, you'll likely want
-    //to put something inside of a try/catch.
-    //TODO check if tiles in validMoves are occupied, avoid if so
+    //for movementRange > 1.
     {
     	Collection<int[]> validMoves = new ArrayList<>();
     	Queue<int[]> unexploredPositions = new LinkedList<>();
+//		System.out.println("searchValidMoves: movementRange is " + this.movementRange);
+		
+    	int[] seed = {this.row, this.column};
     	
-    	int[] seed = {this.x, this.y};
+//    	System.out.println("searchValidMoves: (" + seed[0] + ", " + seed[1] + ") pushed to unexploredPositions");
     	unexploredPositions.add(seed);
-    	
-    	for (int index = MOVEMENT_RANGE; index > 0; index--)
+		
+    	for (int moves = movementRange; moves > 0; moves--)
     	{
     		while (!unexploredPositions.isEmpty())
     		{
 				int[] startingPos = unexploredPositions.poll();
+//				System.out.println("searchValidMoves: exploring (" + startingPos[0] + ", " + startingPos[1] + ")");
 				
     			for (int direction = 0; direction < directions.length; direction++)
     			{
-        			int[] exploring = startingPos;
+        			int[] exploring = {startingPos[0], startingPos[1]};
         			exploring[0] = exploring[0] + directions[direction][0];
         			exploring[1] = exploring[1] + directions[direction][1];
-        			if (!validMoves.contains(exploring))
-        				//to remove redundancies
+        			
+        			try
         			{
-        				validMoves.add(exploring);
+            			if (tiles[exploring[0]][exploring[1]].charRep == '-')
+            			{
+            				validMoves.add(exploring);
+//            				System.out.println("searchValidMoves: adding (" + exploring[0] + ", " + exploring[1] + ")");
+            			}
+        			} catch (ArrayIndexOutOfBoundsException e)
+        			{
+//        				System.out.println("searchValidMoves: outside tile range, continuing");
         			}
     			}
     		}
@@ -82,6 +94,6 @@ public abstract class Piece
     
     void toSysOut()
     {
-    	System.out.println(this.toString() + " with coordinates (" + x + ", " + y + ")");
+    	System.out.println(this.toString() + " with coordinates (" + this.row + ", " + this.column + ")");
     }
 }

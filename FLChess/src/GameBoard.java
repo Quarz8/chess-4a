@@ -59,23 +59,22 @@ public class GameBoard
         	for (int column = 0; column < tiles[row].length; column++)
         	{
         		tiles[row][column] = INITIAL_SETUP[row][column];
-        		tiles[row][column].x = row;
-        		tiles[row][column].y = column;
-        		tiles[row][column].toSysOut();
         	}
         }
     }
     
     public void movePiece(int[] before, int[] after)
-            //Takes in a size-two array in the form of {x, y}
+            //Takes in a size-two array in the form of {row, column}
     {
         try
         {
             System.out.println("Moving tile (" + before[0] + ", " + before[1] +
                     ") to (" + after[0] + ", " + after[1] + ")");
-            Piece movingPiece = tiles[before[1]][before[0]];
-            tiles[after[1]][after[0]] = movingPiece;
-            tiles[before[1]][before[0]] = new NullPiece(before[1], before[0]);
+            Piece movingPiece = tiles[before[0]][before[1]];
+            movingPiece.row = after[0];
+            movingPiece.column = after[1];
+            tiles[after[0]][after[1]] = movingPiece;
+            tiles[before[0]][before[1]] = new NullPiece(before[0], before[1]);
             System.out.println("Chessboard should now be:");
             this.toSysOut();
         }
@@ -92,7 +91,7 @@ public class GameBoard
     {
         String output = "It's currently " + (whiteMoving ? "white's" : "black's")
                 + " turn.\n" + (whiteMoving ? "White" : "Black") + " has used "
-                + actionsTaken + " of " + ACTIONS_PER_TURN + " actions this turn.";
+                + actionsTaken + " of " + ACTIONS_PER_TURN + " actions this turn.\n";
         
         for (int row = 0; row < tiles.length; row++)
         {
