@@ -18,14 +18,14 @@ public abstract class Piece
     char charRep;
     int[][] directions =
 	{
-			{0, 1}, //N
-			{1, 1}, //NE
+			{0, 1}, //S
+			{1, 1}, //SE
 			{1, 0}, //E
-			{1, -1}, //SE
-			{0, -1}, //S
-			{-1, -1}, //SW
+			{1, -1}, //NE
+			{0, -1}, //N
+			{-1, -1}, //NW
 			{-1, 0}, //W
-			{-1, 1} //NW
+			{-1, 1} //SW
 	};
     
     public Piece(boolean white, int row, int column)
@@ -33,11 +33,6 @@ public abstract class Piece
     	this.white = white;
     	this.row = row;
     	this.column = column;
-    }
-    
-    public Piece(boolean white)
-    {
-    	this.white = white;
     }
     
     public Piece()

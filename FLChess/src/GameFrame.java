@@ -264,23 +264,29 @@ class GamePanel extends JPanel
         else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
         	//HANDLING SECOND SELECTION
         {
-            // check if destination is open
-            if (gBoard.tiles[newLoc[0]][newLoc[1]].charRep != '-')
-            {
-                System.out.println("this isnt an attack, space is occupied");
-                selectedTile = NULL_TILE; // reset all selected tiles
-                return;
-            }
-
             // info of previously selected tile
             int[] prevLoc = selectedTile.getBoardLoc();
             
-            gBoard.movePiece(prevLoc, newLoc);
+            for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
+            {
+            	if (Arrays.equals(newLoc, iterator.next())) //valid move
+                {
+                	gBoard.movePiece(prevLoc, newLoc);
+                }
+            }
+            for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
+            {
+            	if (Arrays.equals(newLoc, iterator.next())) //valid attack
+                {
+                	//TODO handle attack behavior here
+                }
+            }
             
             //reset selections, highlights
             selectedTile = NULL_TILE;
             selectedTile2 = NULL_TILE;
             highlightedMoveTiles.clear();
+            highlightedAttackTiles.clear();
         }
 
         this.updateBoard(gBoard);
