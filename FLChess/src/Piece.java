@@ -41,20 +41,30 @@ public abstract class Piece
     	
     }
     
-    public Collection<int[]> searchValidActions(Piece[][] tiles, int[][] directions, int range, boolean move)
-    //Piece[][] tiles: the game board, just without the additional game information.
-    //int[][] directions: a set of all allowed directions the piece can search.
-    //int range: how many tiles a piece will search orthogonally.
-    //boolean move: whether the piece is looking for potential moves or attacks.
-    //	(this changes the criterion for adding new actions to validActions.)
+    public Collection<int[]> searchValidActions(Piece[][] tiles, int[][] directions, boolean move)
+    /* basically a breadth-first searching algorithm.
+     * 
+     * Piece[][] tiles: the game board, just without the additional game information.
+     * int[][] directions: a set of all allowed directions the piece can search.
+     * boolean move: whether the piece is looking for potential moves or attacks.
+     * 	(this changes the range of the search and the criteria for 
+     * 		adding new actions to validActions.)
+     * 
+     * THE COORDINATES INCLUDED IN THE COLLECTION THIS METHOD RETURNS ARE NON-UNIQUE.
+     * that is to say, some coordinates will appear multiple times. if you're handling
+     * the return object and only want to search for the FIRST occurrence of a
+     * coordinate, DO NOT use contains() or indexOf()-- this will compare references,
+     * not values. iterate through it within a for loop, then break out at the first
+     * occurrence. see GameFrame.handleSelection() for an example.
+     */
     {
+    	int range = (move ? this.movementRange : this.attackRange);
     	Collection<int[]> validActions = new ArrayList<>();
-    	Collection<int[]> exploredPositions = new ArrayList<>();
+    	Collection<int[]> exploredPositions = new ArrayList<>(); //needed for non-adjacent attacks (thanks, rooks)
     	Queue<int[]> unexploredPositions = new LinkedList<>();
 		
     	int[] seed = {this.row, this.column};
     	
-//    	System.out.println("searchValidActions: (" + seed[0] + ", " + seed[1] + ") pushed to unexploredPositions");
     	unexploredPositions.add(seed);
 		
     	for (int actions = range; actions > 0; actions--)
@@ -62,7 +72,6 @@ public abstract class Piece
     		while (!unexploredPositions.isEmpty())
     		{
 				int[] startingPos = unexploredPositions.poll();
-//				System.out.println("searchValidActions: exploring (" + startingPos[0] + ", " + startingPos[1] + ")");
 				
     			for (int direction = 0; direction < directions.length; direction++)
     			{
@@ -73,19 +82,18 @@ public abstract class Piece
         			try
         			{
             			if (move && tiles[exploring[0]][exploring[1]].charRep == '-')
+            				//potential move
             			{
             				validActions.add(exploring);
-//            				System.out.println("searchValidActions: adding (" + exploring[0] + ", " + exploring[1] + ")");
             			}
-            			else if (this.white != tiles[exploring[0]][exploring[1]].white)
+            			else if (!move && tiles[exploring[0]][exploring[1]].charRep != '-'
+            					&& this.white != tiles[exploring[0]][exploring[1]].white)
+            				//potential attack
             			{
             				validActions.add(exploring);
-//            				System.out.println("searchValidActions: adding (" + exploring[0] + ", " + exploring[1] + ")");
             			}
-        			} catch (ArrayIndexOutOfBoundsException e)
-        			{
-//        				System.out.println("searchValidActions: outside tile range, continuing");
         			}
+        			catch (ArrayIndexOutOfBoundsException e) { }
         			
         			exploredPositions.add(exploring);
     			}

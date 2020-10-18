@@ -313,8 +313,8 @@ class GamePanel extends JPanel
 
             // save selected tile
             selectedTile = newTile;
-            highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, newTile.pieceAt.movementRange, true);
-            highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, newTile.pieceAt.attackRange, false);
+            highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, true);
+            highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, false);
             
         }
         else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
@@ -328,6 +328,7 @@ class GamePanel extends JPanel
             	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted move tile
                 {
                 	gBoard.movePiece(prevLoc, newLoc);
+                	break;
                 }
             }
             for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
