@@ -1,24 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Jacob Freeland
- */
 public class Bishop extends Piece
 {
-    public Bishop()
+	public Bishop(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'B';
-    }
-    
-    public Bishop(boolean white)
-    {
-        this.white = white;
-        this.charRep = (white ? 'B' : 'b');
+    	super(white, x, y);
+    	this.movementRange = 1;
+    	this.attackRange = 1;
+    	this.minRollToCap = new int[] {5, 5, 5, 4, 5, 3};
+    	this.directions = (white ? new int[][]
+		{
+				{-1, -1}, //NW
+				{-1, 0}, //N
+				{-1, 1}, //NE
+		}: new int[][]
+		{
+				{1, -1}, //SW
+				{1, 0}, //S
+				{1, 1}, //SE
+		});
+    	this.charRep = (white ? 'B' : 'b');
     }
 }

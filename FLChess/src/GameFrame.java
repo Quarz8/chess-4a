@@ -11,7 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.Icon;
@@ -69,12 +73,13 @@ public class GameFrame extends JFrame implements ActionListener
     	attackButton.addActionListener(this);
 
     	//HOW TO PLAY AND PLAY BUTTONS 
-        goGame = new JButton("PLAY");
-        goGame.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        goGame = new JButton();
+        goGame.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Play Button.png")));
         goGame.addActionListener(this);
 
-        howTo = new JButton("HOW TO PLAY");
-        howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        howTo = new JButton();
+        howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
+        //howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
         howTo.addActionListener(this);
 
         //CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START)
@@ -168,6 +173,7 @@ public class GameFrame extends JFrame implements ActionListener
         cardLayout.show(mainPanel, "game");
         controlPanel.setVisible(true);
         game.updateBoard(new GameBoard());
+        game.gBoard.toSysOut();
     }
 
     // FINAL SET UP (MAIN METHOD)
@@ -189,23 +195,23 @@ class MenuPanel extends JPanel
 {
     public MenuPanel()
     {
-        setBackground(new Color(136, 189, 183));
+        setBackground(new Color(255, 255, 255));
         setLayout(new GridLayout(2, 0));
 
         // LOGO
-        JLabel logoImage = new JLabel("LOGO HERE", SwingConstants.CENTER);
-        logoImage.setIcon(null);
-        logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
+        JLabel logoImage = new JLabel();
+        logoImage.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
+        //logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
         logoImage.setVerticalAlignment(SwingConstants.CENTER);
         logoImage.setHorizontalAlignment(SwingConstants.CENTER);
         add(logoImage);
 
         // TEAM NAME
-        JLabel teamName = new JLabel("Team 4A");
-        teamName.setFont(new Font("Tahoma", Font.PLAIN, 44));
-        teamName.setVerticalAlignment(SwingConstants.CENTER);
-        teamName.setHorizontalAlignment(SwingConstants.CENTER);
-        add(teamName);
+        //JLabel teamName = new JLabel("Team 4A");
+        //teamName.setFont(new Font("Tahoma", Font.PLAIN, 44));
+        //teamName.setVerticalAlignment(SwingConstants.CENTER);
+        //teamName.setHorizontalAlignment(SwingConstants.CENTER);
+        //add(teamName);
     }
 
     @Override
@@ -222,29 +228,29 @@ class GamePanel extends JPanel
     TilePanel[][] pnlChessCells = new TilePanel[gBoard.tiles.length][gBoard.tiles[0].length];
     TilePanel selectedTile;
     TilePanel selectedTile2;
+    Collection<int[]> highlightedMoveTiles = new ArrayList<>();
+    Collection<int[]> highlightedAttackTiles = new ArrayList<>();
     final Color DARK_COLOR = new Color(136, 0, 27);
     final Color LIGHT_COLOR = new Color(255, 206, 158);
-    final Color SELECT_COLOR = new Color(24, 39, 64);
-    final TilePanel NULL_TILE = new TilePanel(-1, -1, this, new BorderLayout());
+    final Color SELECT_COLOR = new Color(78, 245, 98);
+    final Color MOVE_COLOR = new Color(122, 77, 201);
+    final Color ATTACK_COLOR = new Color(184, 35, 9);
+    final TilePanel NULL_TILE = new TilePanel(this, new BorderLayout());
 
     public GamePanel()
     {
         setLayout(new GridLayout(pnlChessCells.length, pnlChessCells[0].length));
+        NULL_TILE.pieceAt = new NullPiece();
         this.selectedTile = NULL_TILE;
         this.selectedTile2 = NULL_TILE;
 
         // CREATE BOARD IN GAME PANEL CONSTRUCTOR
-        for (int y = 0; y < pnlChessCells.length; y++)
+        for (int row = 0; row < pnlChessCells.length; row++)
         {
-            for (int x = 0; x < pnlChessCells[0].length; x++)
+            for (int column = 0; column < pnlChessCells[0].length; column++)
             {
-                pnlChessCells[y][x] = new TilePanel(x, y, this, new BorderLayout());
-                this.add(pnlChessCells[y][x]);
-
-                if ((x + y) % 2 == 0)
-                    pnlChessCells[y][x].setBackground(LIGHT_COLOR);
-                else
-                    pnlChessCells[y][x].setBackground(DARK_COLOR);
+                pnlChessCells[row][column] = new TilePanel(this, new BorderLayout());
+                this.add(pnlChessCells[row][column]);
             }
         }
     }
@@ -252,15 +258,38 @@ class GamePanel extends JPanel
     public void updateBoard(GameBoard gBoard)
     {
         // PLACE PIECES ON BOARD IN GAME PANEL CONSTRUCTOR
-        for (int x = 0; x < pnlChessCells.length; x++)
+        for (int row = 0; row < pnlChessCells.length; row++)
         {
-            for (int y = 0; y < pnlChessCells[0].length; y++)
+            for (int column = 0; column < pnlChessCells[0].length; column++)
             {
-                pnlChessCells[x][y].removeAll();
-                pnlChessCells[x][y].add(this.getPieceObject(gBoard.tiles[x][y].charRep), BorderLayout.CENTER);
-                pnlChessCells[x][y].validate();
-                pnlChessCells[x][y].repaint();
+            	pnlChessCells[row][column].removeAll();
+                pnlChessCells[row][column].add(this.getPieceObject(gBoard.tiles[row][column].charRep), BorderLayout.CENTER);
+                pnlChessCells[row][column].pieceAt = gBoard.tiles[row][column];
+                
+                if ((column + row) % 2 == 0)
+                    pnlChessCells[row][column].setBackground(LIGHT_COLOR);
+                else
+                    pnlChessCells[row][column].setBackground(DARK_COLOR);
+                
+                pnlChessCells[row][column].validate();
+                pnlChessCells[row][column].repaint();
             }
+        }
+        
+        //highlighting tiles here
+        if (selectedTile.pieceAt.charRep != new NullPiece().charRep)
+        {
+        	pnlChessCells[selectedTile.pieceAt.row][selectedTile.pieceAt.column].setBackground(SELECT_COLOR);
+        }
+        for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
+        {
+        	int[] highlightPos = iterator.next();
+        	pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(MOVE_COLOR);
+        }
+        for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
+        {
+        	int[] highlightPos = iterator.next();
+        	pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(ATTACK_COLOR);
         }
     }
 
@@ -268,94 +297,56 @@ class GamePanel extends JPanel
     {
         // new tile information
         int[] newLoc = newTile.getBoardLoc();
-        int newXLoc = newLoc[0];
-        int newYLoc = newLoc[1];
+    	gBoard.tiles[newLoc[0]][newLoc[1]].toSysOut();
 
-        // must not have selected a tile already
-        if (selectedTile.x == -1)
+        if (selectedTile.pieceAt.charRep == new NullPiece().charRep)
+        	//HANDLING FIRST SELECTION
         {
             // if empty tile/null piece, do nothing and break out
-            if (gBoard.tiles[newYLoc][newXLoc].charRep == '-')
+            if (gBoard.tiles[newLoc[0]][newLoc[1]].charRep == '-')
             {
                 System.out.println("not a piece. must select piece first");
                 return;
             }
-            System.out.println(newTile.getComponentCount() + "handleSelection called, no previously selected"
+            System.out.println("handleSelection called, no previously selected"
                     + " tile found so this is selectedTile");
 
             // save selected tile
             selectedTile = newTile;
+            highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, true);
+            highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, false);
+            
         }
-        else if (selectedTile2.x == -1)
+        else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
+        	//HANDLING SECOND SELECTION
         {
-            // check if destination is open
-            if (gBoard.tiles[newYLoc][newXLoc].charRep != '-')
-            {
-                System.out.println("this isnt an attack, space is occupied");
-                selectedTile = NULL_TILE; // reset all selected tiles
-                return;
-            }
-
             // info of previously selected tile
             int[] prevLoc = selectedTile.getBoardLoc();
-            int prevXLoc = prevLoc[0];
-            int prevYLoc = prevLoc[1];
-
-            // rules for moving previously selected piece...
-            // white pawns and bishops
-            if (gBoard.tiles[prevYLoc][prevXLoc].charRep == 'P' || gBoard.tiles[prevYLoc][prevXLoc].charRep == 'B')
-            {
-                if ((newYLoc >= prevYLoc || newYLoc < prevYLoc - 1)
-                        || (newXLoc > prevXLoc + 1 || newXLoc < prevXLoc - 1)) // only forward by 1
-                {
-                    System.out.println("invalid move noob");
-                    selectedTile = NULL_TILE; // reset all selected tiles
-                    return;
-                }
-            }
-
-            // black pawns and bishops
-            if (gBoard.tiles[prevYLoc][prevXLoc].charRep == 'p' || gBoard.tiles[prevYLoc][prevXLoc].charRep == 'b')
-            {
-                if ((newYLoc <= prevYLoc || newYLoc > prevYLoc + 1)
-                        || (newXLoc > prevXLoc + 1 || newXLoc < prevXLoc - 1)) // only forward by 1
-                {
-                    System.out.println("invalid move noob");
-                    selectedTile = NULL_TILE; // reset all selected tiles
-                    return;
-                }
-            }
-
-            // rooks
-            if (gBoard.tiles[prevYLoc][prevXLoc].charRep == 'r' || gBoard.tiles[prevYLoc][prevXLoc].charRep == 'R')
-            {
-                if (newYLoc > prevYLoc + 1 || newYLoc < prevYLoc - 1 || newXLoc > prevXLoc + 1
-                        || newXLoc < prevXLoc - 1) // only by 1
-                {
-                    System.out.println("invalid move noob");
-                    selectedTile = NULL_TILE; // reset all selected tiles
-                    return;
-                }
-            }
-
-            // kings and queens
-            // need an actual algorithm for these guys (3 spaces any direction), A* search specifically.
             
-            // knights
-            // same algorithm can be used, just with a larger range (5 spaces any direction)
-
-            System.out.println("handleSelection called, selectedTile found"
-                    + " so this is selectedTile2, performing move and resetting");
-            selectedTile2 = newTile;
-            int[] before =
-            { selectedTile.x, selectedTile.y };
-            int[] after =
-            { selectedTile2.x, selectedTile2.y };
-            gBoard.movePiece(before, after);
-            this.updateBoard(gBoard);
+            for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
+            {
+            	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted move tile
+                {
+                	gBoard.movePiece(prevLoc, newLoc);
+                	break;
+                }
+            }
+            for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
+            {
+            	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted attack tile
+                {
+                	//TODO handle attack behavior here
+                }
+            }
+            
+            //reset selections, highlights
             selectedTile = NULL_TILE;
             selectedTile2 = NULL_TILE;
+            highlightedMoveTiles.clear();
+            highlightedAttackTiles.clear();
         }
+
+        this.updateBoard(gBoard);
     }
 
     @Override
@@ -372,86 +363,74 @@ class GamePanel extends JPanel
         switch (pieceRep)
         {
         case 'r':
-            lblTemp = new JLabel("black rook");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Rook
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Rook Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'b':
-            lblTemp = new JLabel("black bishop");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Bishop
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Bishop Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'n':
-            lblTemp = new JLabel("black knight");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight
-            // piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'q':
-            lblTemp = new JLabel("black queen");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'k':
-            lblTemp = new JLabel("black king");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/King
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/King Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'p':
-            lblTemp = new JLabel("black pawn");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Pawn
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Pawn Piece.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'R':
-            lblTemp = new JLabel("white rook");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Rook Piece
-            // White.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Rook Piece White.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'B':
-            lblTemp = new JLabel("white bishop");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Bishop
-            // Piece white.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Bishop Piece white.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'N':
-            lblTemp = new JLabel("white knight");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight
-            // piece white.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight piece white.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'Q':
-            lblTemp = new JLabel("white queen");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen Piece
-            // White.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen Piece White.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
-            lblTemp.setVerticalAlignment(SwingConstants.CENTER);
+            lblTemp. setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'K':
-            lblTemp = new JLabel("white king");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/King
-            // Piece.png")));
+            lblTemp = new JLabel();
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/King Piece white.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'P':
             lblTemp = new JLabel("white pawn");
-            // lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Pawn Piece
-            // white.png")));
+            lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Pawn Piece white.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
             lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
@@ -465,30 +444,20 @@ class GamePanel extends JPanel
 
 class TilePanel extends JPanel implements MouseListener
 {
-    GamePanel parent;
-    int x;
-    int y;
+	GamePanel parent;
+    Piece pieceAt;
 
     public TilePanel(GamePanel parent, LayoutManager layout)
     {
+    	this.parent = parent;
         addMouseListener(this);
         this.setLayout(layout);
-        this.parent = parent;
-    }
-
-    public TilePanel(int x, int y, GamePanel parent, LayoutManager layout)
-    {
-        addMouseListener(this);
-        this.setLayout(layout);
-        this.parent = parent;
-        this.x = x;
-        this.y = y;
     }
 
     public int[] getBoardLoc()
     {
         int[] loc =
-        { x, y };
+        { pieceAt.row, pieceAt.column };
         return loc;
     }
 
@@ -501,7 +470,6 @@ class TilePanel extends JPanel implements MouseListener
     @Override
     public void mousePressed(MouseEvent e)
     {
-        System.out.println("mousePressed called by tile at (" + x + ", " + y + ")");
         parent.handleSelection(this);
     }
 

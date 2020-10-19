@@ -1,26 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Jacob Freeland
- */
 public class Pawn extends Piece
 {
-    boolean hasMoved = false;
-    
-    public Pawn()
+	public Pawn(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'P';
-    }
-    
-    public Pawn(boolean white)
-    {
-        this.white = white;
-        this.charRep = (white ? 'P' : 'p');
+    	super(white, x, y);
+    	this.movementRange = 1;
+    	this.attackRange = 1;
+    	this.minRollToCap = new int[]{6, 6, 6, 5, 6, 4};
+    	this.directions = (white ? new int[][]
+		{
+				{-1, -1}, //NW
+				{-1, 0}, //N
+				{-1, 1}, //NE
+		}: new int[][]
+		{
+				{1, -1}, //SW
+				{1, 0}, //S
+				{1, 1}, //SE
+		});
+    	this.charRep = (white ? 'P' : 'p');
     }
 }

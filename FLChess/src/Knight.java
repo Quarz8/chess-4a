@@ -1,24 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Jacob Freeland
- */
 public class Knight extends Piece
 {
-    public Knight()
+	boolean hasMoved = false;
+	
+	public Knight(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'N';
-    }
-    
-    public Knight(boolean white)
-    {
-        this.white = white;
-        this.charRep = (white ? 'N' : 'n');
+    	super(white, x, y);
+    	this.movementRange = 5;
+    	this.attackRange = 1;
+    	this.minRollToCap = new int[]{6, 6, 4, 4, 5, 2};
+    	this.charRep = (white ? 'N' : 'n');
     }
 }
