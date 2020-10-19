@@ -351,6 +351,7 @@ class GamePanel extends JPanel
             	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted attack tile
                 {
                 	//TODO handle attack behavior here
+                	GameFrame.whiteTurn = GameFrame.whiteTurn? false : true; //switches player turn after move is made
                 }
             }
             
