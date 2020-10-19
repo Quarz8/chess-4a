@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
@@ -31,6 +32,9 @@ import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import java.lang.*;
+
+
 public class GameFrame extends JFrame implements ActionListener
 {
     CardLayout cardLayout;
@@ -46,6 +50,8 @@ public class GameFrame extends JFrame implements ActionListener
     ImageIcon instruct = new ImageIcon("Images/medChess-1.jpg");
 
     String longMessage;
+
+    public static boolean whiteTurn = true; //true means it is white turn
 
     // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
@@ -313,6 +319,14 @@ class GamePanel extends JPanel
 
             // save selected tile
             selectedTile = newTile;
+            
+          /*if the selected tile color does not match the color of the player's turn,
+            return an error message */
+            if(selectedTile.pieceAt.white != GameFrame.whiteTurn) { 
+                System.out.println("Not your turn");
+                return;
+             }
+
             highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, true);
             highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, false);
             
@@ -328,6 +342,7 @@ class GamePanel extends JPanel
             	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted move tile
                 {
                 	gBoard.movePiece(prevLoc, newLoc);
+                	GameFrame.whiteTurn = GameFrame.whiteTurn? false : true; //switches player turn after move is made
                 	break;
                 }
             }
