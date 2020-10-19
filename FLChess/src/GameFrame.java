@@ -47,57 +47,61 @@ public class GameFrame extends JFrame implements ActionListener
 
     String longMessage;
 
-    // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // GAME FRAME FOR OVERALL SET UP (UNIVERSAL
+    // BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
     {
-        //INITIALIZATION OF CARD LAYOUT STYLE FOR THE MAIN PANEL AND FLOW LAYOUT STYLE FOR CONTROL PANEL -- THE MENU/GAME PANELS CONTAINED IN MAIN PANEL
+        // INITIALIZATION OF CARD LAYOUT STYLE FOR THE MAIN PANEL AND FLOW LAYOUT STYLE
+        // FOR CONTROL PANEL -- THE MENU/GAME PANELS CONTAINED IN MAIN PANEL
         cardLayout = new CardLayout();
         flowLayout = new FlowLayout(SwingConstants.LEFT);
-        
+
         menu = new MenuPanel();
         game = new GamePanel();
-        
+
         mainPanel = new JPanel(cardLayout);
         mainPanel.add(menu, "menu");
         mainPanel.add(game, "game");
 
-        //MOVE AND ATTACK BUTTONS (HIDDEN UNTIL GAME PANEL IS SHOWN) -- THESE ARE ADDED TO THE CONTROL PANEL
-    	moveButton = new JButton("MOVE");
-    	moveButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
-    	moveButton.setPreferredSize(new Dimension(493,100));
-    	moveButton.addActionListener(this);
-    	
-    	attackButton = new JButton("ATTACK");
-    	attackButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
-    	attackButton.setPreferredSize(new Dimension(493,100));;
-    	attackButton.addActionListener(this);
+        // MOVE AND ATTACK BUTTONS (HIDDEN UNTIL GAME PANEL IS SHOWN) -- THESE ARE ADDED
+        // TO THE CONTROL PANEL
+        moveButton = new JButton("MOVE");
+        moveButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        moveButton.setPreferredSize(new Dimension(493, 100));
+        moveButton.addActionListener(this);
 
-    	//HOW TO PLAY AND PLAY BUTTONS 
+        attackButton = new JButton("ATTACK");
+        attackButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        attackButton.setPreferredSize(new Dimension(493, 100));
+        ;
+        attackButton.addActionListener(this);
+
+        // HOW TO PLAY AND PLAY BUTTONS
         goGame = new JButton();
         goGame.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Play Button.png")));
         goGame.addActionListener(this);
 
         howTo = new JButton();
         howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
-        //howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        // howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
         howTo.addActionListener(this);
 
-        //CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START)
-    	controlPanel = new JPanel(flowLayout);
-    	controlPanel.add(moveButton);
-    	controlPanel.add(attackButton);
+        // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START)
+        controlPanel = new JPanel(flowLayout);
+        controlPanel.add(moveButton);
+        controlPanel.add(attackButton);
 
-        //PUSH COMPONENTS TO GAMEFRAME (JFRAME)
+        // PUSH COMPONENTS TO GAMEFRAME (JFRAME)
         add(mainPanel);
         add(goGame, BorderLayout.EAST);
         add(howTo, BorderLayout.WEST);
         add(controlPanel, BorderLayout.SOUTH);
-    	controlPanel.setVisible(false);
-        
+        controlPanel.setVisible(false);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
-        setLocation(0,0);
-        setSize(1240,900);
+        setLocation(0, 0);
+        setSize(1240, 900);
         setResizable(false);
         setVisible(true);
     }
@@ -147,23 +151,23 @@ public class GameFrame extends JFrame implements ActionListener
         }
         else if (e.getSource() == moveButton)
         {
-        	//SHOWS CHANGE IN STATE TO MOVE GAMEPLAY
-        	attackButton.setBackground(null);
-        	attackButton.setForeground(Color.black);
-        	moveButton.setBackground(new Color(136, 0, 27));
-        	moveButton.setForeground(Color.white);
-        	
-        	//MOVEMENT STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
+            // SHOWS CHANGE IN STATE TO MOVE GAMEPLAY
+            attackButton.setBackground(null);
+            attackButton.setForeground(Color.black);
+            moveButton.setBackground(new Color(136, 0, 27));
+            moveButton.setForeground(Color.white);
+
+            // MOVEMENT STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
         }
         else if (e.getSource() == attackButton)
         {
-        	//SHOWS CHANGE IN STATE TO ATTACK GAMEPLAY
-        	moveButton.setBackground(null);
-        	moveButton.setForeground(Color.black);
-        	attackButton.setBackground(new Color(136, 0, 27));
-        	attackButton.setForeground(Color.white);
-        	
-        	//ATTACKING STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
+            // SHOWS CHANGE IN STATE TO ATTACK GAMEPLAY
+            moveButton.setBackground(null);
+            moveButton.setForeground(Color.black);
+            attackButton.setBackground(new Color(136, 0, 27));
+            attackButton.setForeground(Color.white);
+
+            // ATTACKING STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
         }
     }
 
@@ -190,7 +194,8 @@ public class GameFrame extends JFrame implements ActionListener
     }
 }
 
-// MAIN MENU PANEL/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MAIN MENU
+// PANEL/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MenuPanel extends JPanel
 {
     public MenuPanel()
@@ -201,17 +206,17 @@ class MenuPanel extends JPanel
         // LOGO
         JLabel logoImage = new JLabel();
         logoImage.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
-        //logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
+        // logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
         logoImage.setVerticalAlignment(SwingConstants.CENTER);
         logoImage.setHorizontalAlignment(SwingConstants.CENTER);
         add(logoImage);
 
         // TEAM NAME
-        //JLabel teamName = new JLabel("Team 4A");
-        //teamName.setFont(new Font("Tahoma", Font.PLAIN, 44));
-        //teamName.setVerticalAlignment(SwingConstants.CENTER);
-        //teamName.setHorizontalAlignment(SwingConstants.CENTER);
-        //add(teamName);
+        // JLabel teamName = new JLabel("Team 4A");
+        // teamName.setFont(new Font("Tahoma", Font.PLAIN, 44));
+        // teamName.setVerticalAlignment(SwingConstants.CENTER);
+        // teamName.setHorizontalAlignment(SwingConstants.CENTER);
+        // add(teamName);
     }
 
     @Override
@@ -221,7 +226,8 @@ class MenuPanel extends JPanel
     }
 }
 
-// ACTUAL GAMEPLAY PANEL////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ACTUAL GAMEPLAY
+// PANEL////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GamePanel extends JPanel
 {
     GameBoard gBoard = new GameBoard();
@@ -262,34 +268,35 @@ class GamePanel extends JPanel
         {
             for (int column = 0; column < pnlChessCells[0].length; column++)
             {
-            	pnlChessCells[row][column].removeAll();
-                pnlChessCells[row][column].add(this.getPieceObject(gBoard.tiles[row][column].charRep), BorderLayout.CENTER);
+                pnlChessCells[row][column].removeAll();
+                pnlChessCells[row][column].add(this.getPieceObject(gBoard.tiles[row][column].charRep),
+                        BorderLayout.CENTER);
                 pnlChessCells[row][column].pieceAt = gBoard.tiles[row][column];
-                
+
                 if ((column + row) % 2 == 0)
                     pnlChessCells[row][column].setBackground(LIGHT_COLOR);
                 else
                     pnlChessCells[row][column].setBackground(DARK_COLOR);
-                
+
                 pnlChessCells[row][column].validate();
                 pnlChessCells[row][column].repaint();
             }
         }
-        
-        //highlighting tiles here
+
+        // highlighting tiles here
         if (selectedTile.pieceAt.charRep != new NullPiece().charRep)
         {
-        	pnlChessCells[selectedTile.pieceAt.row][selectedTile.pieceAt.column].setBackground(SELECT_COLOR);
+            pnlChessCells[selectedTile.pieceAt.row][selectedTile.pieceAt.column].setBackground(SELECT_COLOR);
         }
         for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
         {
-        	int[] highlightPos = iterator.next();
-        	pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(MOVE_COLOR);
+            int[] highlightPos = iterator.next();
+            pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(MOVE_COLOR);
         }
         for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
         {
-        	int[] highlightPos = iterator.next();
-        	pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(ATTACK_COLOR);
+            int[] highlightPos = iterator.next();
+            pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(ATTACK_COLOR);
         }
     }
 
@@ -297,10 +304,10 @@ class GamePanel extends JPanel
     {
         // new tile information
         int[] newLoc = newTile.getBoardLoc();
-    	gBoard.tiles[newLoc[0]][newLoc[1]].toSysOut();
+        gBoard.tiles[newLoc[0]][newLoc[1]].toSysOut();
 
         if (selectedTile.pieceAt.charRep == new NullPiece().charRep)
-        	//HANDLING FIRST SELECTION
+        // HANDLING FIRST SELECTION
         {
             // if empty tile/null piece, do nothing and break out
             if (gBoard.tiles[newLoc[0]][newLoc[1]].charRep == '-')
@@ -308,38 +315,39 @@ class GamePanel extends JPanel
                 System.out.println("not a piece. must select piece first");
                 return;
             }
-            System.out.println("handleSelection called, no previously selected"
-                    + " tile found so this is selectedTile");
+            System.out
+                    .println("handleSelection called, no previously selected" + " tile found so this is selectedTile");
 
             // save selected tile
             selectedTile = newTile;
             highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, true);
-            highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, false);
-            
+            highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
+                    false);
+
         }
         else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
-        	//HANDLING SECOND SELECTION
+        // HANDLING SECOND SELECTION
         {
             // info of previously selected tile
             int[] prevLoc = selectedTile.getBoardLoc();
-            
+
             for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
             {
-            	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted move tile
+                if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted move tile
                 {
-                	gBoard.movePiece(prevLoc, newLoc);
-                	break;
+                    gBoard.movePiece(prevLoc, newLoc);
+                    break;
                 }
             }
             for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
             {
-            	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted attack tile
+                if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
                 {
-                	//TODO handle attack behavior here
+                    // TODO handle attack behavior here
                 }
             }
-            
-            //reset selections, highlights
+
+            // reset selections, highlights
             selectedTile = NULL_TILE;
             selectedTile2 = NULL_TILE;
             highlightedMoveTiles.clear();
@@ -420,7 +428,7 @@ class GamePanel extends JPanel
             lblTemp = new JLabel();
             lblTemp.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Queen Piece White.png")));
             lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
-            lblTemp. setVerticalAlignment(SwingConstants.CENTER);
+            lblTemp.setVerticalAlignment(SwingConstants.CENTER);
             break;
         case 'K':
             lblTemp = new JLabel();
@@ -444,12 +452,12 @@ class GamePanel extends JPanel
 
 class TilePanel extends JPanel implements MouseListener
 {
-	GamePanel parent;
+    GamePanel parent;
     Piece pieceAt;
 
     public TilePanel(GamePanel parent, LayoutManager layout)
     {
-    	this.parent = parent;
+        this.parent = parent;
         addMouseListener(this);
         this.setLayout(layout);
     }

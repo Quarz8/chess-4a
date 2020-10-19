@@ -1,8 +1,8 @@
 public class Bishop extends Piece
 {
-	public Bishop(boolean white, int x, int y)
+	public Bishop(boolean white, int x, int y, Corp corp)
     {
-    	super(white, x, y);
+    	super(white, x, y, corp);
     	this.movementRange = 1;
     	this.attackRange = 1;
     	this.minRollToCap = new int[] {5, 5, 5, 4, 5, 3};
