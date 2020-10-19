@@ -1,11 +1,11 @@
 public class GameBoard
 {
     Piece tiles[][] = new Piece[8][8];
-    int actionsTaken = 0;
+    int actionsTaken = 0; // actions taken on turn so far
     boolean whiteMoving;
     
-    int totalActionsWhite = 3;
-    int totalActionsBlack = 3;
+    int maxActionsWhite = 3; // maximum number of actions white can perform
+    int maxActionsBlack = 3; // maximum number of actions black can perform
     
     Corp corpBW1 = new Corp(); // white bishop corp 1
     Corp corpBW2 = new Corp(); // white bishop corp 2
@@ -101,7 +101,7 @@ public class GameBoard
     {
         String output = "It's currently " + (whiteMoving ? "white's" : "black's")
                 + " turn.\n" + (whiteMoving ? "White" : "Black") + " has used "
-                + actionsTaken + " of " + (whiteMoving ? totalActionsWhite : totalActionsBlack) + " actions this turn.\n";
+                + actionsTaken + " of " + (whiteMoving ? maxActionsWhite : maxActionsBlack) + " actions this turn.\n";
         
         for (int row = 0; row < tiles.length; row++)
         {
