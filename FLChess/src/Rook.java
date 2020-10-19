@@ -1,24 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Jacob Freeland
- */
 public class Rook extends Piece
 {
-    public Rook()
+	public Rook(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'R';
-    }
-    
-    public Rook(boolean white)
-    {
-        this.white = white;
-        this.charRep = (white ? 'R' : 'r');
+    	super(white, x, y);
+    	this.movementRange = 1;
+    	this.attackRange = 3;
+    	this.minRollToCap = new int[] {4, 4, 5, 5, 6, 5};
+    	this.charRep = (white ? 'R' : 'r');
     }
 }

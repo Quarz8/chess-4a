@@ -1,24 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Jacob Freeland
- */
 public class Queen extends Piece
 {
-    public Queen()
+	public Queen(boolean white, int x, int y)
     {
-        this.white = true;
-        this.charRep = 'Q';
-    }
-    
-    public Queen(boolean white)
-    {
-        this.white = white;
-        this.charRep = (white ? 'Q' : 'q');
+    	super(white, x, y);
+    	this.movementRange = 3;
+    	this.attackRange = 1;
+    	this.minRollToCap = new int[] {4, 4, 4, 4, 5, 2};
+    	this.charRep = (white ? 'Q' : 'q');
     }
 }

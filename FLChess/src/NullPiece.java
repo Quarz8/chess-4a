@@ -1,18 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Jacob Freeland
- */
 public class NullPiece extends Piece
 {
-    public NullPiece()
+	public NullPiece(int x, int y)
     {
-        this.white = true;
-        this.charRep = '-';
+    	super(true, x, y);
+    	this.movementRange = 0;
+    	this.attackRange = 0;
+    	this.minRollToCap = new int[] {7, 7, 7, 7, 7, 7};
+    	this.charRep = '-';
     }
+	
+	public NullPiece()
+	{
+    	this.movementRange = 0;
+    	this.attackRange = 0;
+    	this.minRollToCap = new int[] {7, 7, 7, 7, 7, 7};
+    	this.charRep = '-';
+	}
 }
