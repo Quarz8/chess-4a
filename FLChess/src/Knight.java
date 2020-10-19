@@ -7,7 +7,7 @@ public class Knight extends Piece
     	super(white, x, y);
     	this.movementRange = 5;
     	this.attackRange = 1;
-    	this.minRollToCap = new int[]{6, 6, 4, 5, 2};
+    	this.minRollToCap = new int[]{6, 6, 4, 4, 5, 2};
     	this.charRep = (white ? 'N' : 'n');
     }
 }

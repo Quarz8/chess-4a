@@ -78,7 +78,7 @@ public class GameFrame extends JFrame implements ActionListener
         goGame.addActionListener(this);
 
         howTo = new JButton();
-//        howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
+        howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
         //howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
         howTo.addActionListener(this);
 
@@ -198,13 +198,13 @@ class MenuPanel extends JPanel
         setBackground(new Color(255, 255, 255));
         setLayout(new GridLayout(2, 0));
 
-//        // LOGO
-//        JLabel logoImage = new JLabel();
-//        logoImage.setIcon (new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
-//        //logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
-//        logoImage.setVerticalAlignment(SwingConstants.CENTER);
-//        logoImage.setHorizontalAlignment(SwingConstants.CENTER);
-//        add(logoImage);
+        // LOGO
+        JLabel logoImage = new JLabel();
+        logoImage.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
+        //logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
+        logoImage.setVerticalAlignment(SwingConstants.CENTER);
+        logoImage.setHorizontalAlignment(SwingConstants.CENTER);
+        add(logoImage);
 
         // TEAM NAME
         //JLabel teamName = new JLabel("Team 4A");

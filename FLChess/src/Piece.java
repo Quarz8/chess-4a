@@ -99,8 +99,7 @@ public abstract class Piece
     			}
     		}
     		
-    		unexploredPositions.addAll(exploredPositions);
-    		exploredPositions.clear();
+    		unexploredPositions.addAll(move ? validActions : exploredPositions);
     	}
     	
 		return validActions;
