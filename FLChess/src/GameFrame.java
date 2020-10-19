@@ -324,6 +324,7 @@ class GamePanel extends JPanel
             return an error message */
             if(selectedTile.pieceAt.white != GameFrame.whiteTurn) { 
                 System.out.println("Not your turn");
+                selectedTile = NULL_TILE;
                 return;
              }
 
