@@ -51,9 +51,6 @@ public class GameFrame extends JFrame implements ActionListener
 
     String longMessage;
 
-
-    public static boolean whiteTurn = true; //true means it is white turn
-
     // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
     {
@@ -327,7 +324,7 @@ class GamePanel extends JPanel
             
           /*if the selected tile color does not match the color of the player's turn,
             return an error message */
-            if(newTile.pieceAt.white != GameFrame.whiteTurn) { 
+            if(newTile.pieceAt.white != gBoard.whiteMoving) { 
                 System.out.println("Not your turn");
                 return;
              }
@@ -363,8 +360,8 @@ class GamePanel extends JPanel
                     gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
                     if (gBoard.actionsTaken >= gBoard.maxActionsWhite) // if max action limit is reach...
                     {
-                        System.out.println("this is where the turn would end");
-                        GameFrame.whiteTurn = GameFrame.whiteTurn? false : true; //switches player turn after move is made
+                        System.out.println("END OF TURN");
+                        gBoard.whiteMoving = gBoard.whiteMoving? false : true; //switches player turn after move is made
                         gBoard.actionsTaken=0; // reset actionsTaken
                         // reset all corp's hasActed to false
                         gBoard.corpBB1.setHasActed(false);
@@ -395,8 +392,8 @@ class GamePanel extends JPanel
                         
                     if (gBoard.actionsTaken >= gBoard.maxActionsWhite)
                     {
-                        System.out.println("this is where the turn would end");
-                        GameFrame.whiteTurn = GameFrame.whiteTurn? false : true; //switches player turn after move is made
+                        System.out.println("END OF TURN");
+                        gBoard.whiteMoving = gBoard.whiteMoving? false : true; //switches player turn after move is made
                         gBoard.actionsTaken=0; // reset actionsTaken
                         // reset all corp's hasActed to false
                         gBoard.corpBB1.setHasActed(false);
