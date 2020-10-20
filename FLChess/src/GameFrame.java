@@ -69,7 +69,7 @@ public class GameFrame extends JFrame implements ActionListener
     	
     	attackButton = new JButton("ATTACK");
     	attackButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
-    	attackButton.setPreferredSize(new Dimension(493,100));;
+    	attackButton.setPreferredSize(new Dimension(493,100));
     	attackButton.addActionListener(this);
 
     	//HOW TO PLAY AND PLAY BUTTONS 
@@ -265,17 +265,17 @@ class GamePanel extends JPanel
             	pnlChessCells[row][column].removeAll();
                 pnlChessCells[row][column].add(this.getPieceObject(gBoard.tiles[row][column].charRep), BorderLayout.CENTER);
                 pnlChessCells[row][column].pieceAt = gBoard.tiles[row][column];
-                
+
                 if ((column + row) % 2 == 0)
                     pnlChessCells[row][column].setBackground(LIGHT_COLOR);
                 else
                     pnlChessCells[row][column].setBackground(DARK_COLOR);
-                
+
                 pnlChessCells[row][column].validate();
                 pnlChessCells[row][column].repaint();
             }
         }
-        
+
         //highlighting tiles here
         if (selectedTile.pieceAt.charRep != new NullPiece().charRep)
         {
@@ -315,14 +315,14 @@ class GamePanel extends JPanel
             selectedTile = newTile;
             highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, true);
             highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, false);
-            
+
         }
         else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
         	//HANDLING SECOND SELECTION
         {
             // info of previously selected tile
             int[] prevLoc = selectedTile.getBoardLoc();
-            
+
             for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
             {
             	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted move tile
@@ -334,11 +334,15 @@ class GamePanel extends JPanel
             for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
             {
             	if (Arrays.equals(newLoc, iterator.next())) //selected a highlighted attack tile
-                {
-                	//TODO handle attack behavior here
+                {                	
+                    Attack piece = new Attack();
+                    if(piece.tryAttack(selectedTile.pieceAt, selectedTile2.pieceAt, selectedTile.pieceAt.hasMoved)){
+                       piece.killPiece(selectedTile2.pieceAt);
+                        gBoard.movePiece(prevLoc, newLoc);
+                    }
                 }
             }
-            
+
             //reset selections, highlights
             selectedTile = NULL_TILE;
             selectedTile2 = NULL_TILE;
@@ -446,6 +450,7 @@ class TilePanel extends JPanel implements MouseListener
 {
 	GamePanel parent;
     Piece pieceAt;
+
 
     public TilePanel(GamePanel parent, LayoutManager layout)
     {
