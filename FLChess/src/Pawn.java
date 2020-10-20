@@ -1,8 +1,8 @@
 public class Pawn extends Piece
 {
-	public Pawn(boolean white, int x, int y)
+	public Pawn(boolean white, int x, int y, Corp corp)
     {
-    	super(white, x, y);
+    	super(white, x, y, corp);
     	this.movementRange = 1;
     	this.attackRange = 1;
     	this.minRollToCap = new int[]{6, 6, 6, 5, 6, 4};

@@ -1,23 +1,33 @@
 public class GameBoard
 {
     Piece tiles[][] = new Piece[8][8];
-    int actionsTaken = 0;
+    int actionsTaken = 0; // actions taken on turn so far
     boolean whiteMoving;
     
-    final int ACTIONS_PER_TURN = 3;
+    int maxActionsWhite = 3; // maximum number of actions white can perform
+    int maxActionsBlack = 3; // maximum number of actions black can perform
+    
+    Corp corpBW1 = new Corp(); // white bishop corp 1
+    Corp corpBW2 = new Corp(); // white bishop corp 2
+    Corp corpKW = new Corp(); // white king corp
+    
+    Corp corpBB1 = new Corp(); // black bishop corp 1
+    Corp corpBB2 = new Corp(); // black bishop corp 2
+    Corp corpKB = new Corp(); // black king corp
+    
     final Piece INITIAL_SETUP[][] =
     		//i wrote this out by hand. trust me i tried figuring out how to
     		//automate this. help
     {
         {
-            new Rook(false, 0, 0), new Knight(false, 0, 1), new Bishop(false, 0, 2),
-            new Queen(false, 0, 3), new King(false, 0, 4), new Bishop(false, 0, 5),
-            new Knight(false, 0, 6), new Rook(false, 0, 7)
+            new Rook(false, 0, 0, corpKB), new Knight(false, 0, 1, corpBB1), new Bishop(false, 0, 2, corpBB1),
+            new Queen(false, 0, 3, corpKB), new King(false, 0, 4, corpKB), new Bishop(false, 0, 5, corpBB2),
+            new Knight(false, 0, 6, corpBB2), new Rook(false, 0, 7, corpKB)
         },
         {
-            new Pawn(false, 1, 0), new Pawn(false, 1, 1), new Pawn(false, 1, 2), 
-            new Pawn(false, 1, 3), new Pawn(false, 1, 4), new Pawn(false, 1, 5), 
-            new Pawn(false, 1, 6), new Pawn(false, 1, 7)
+            new Pawn(false, 1, 0, corpBB1), new Pawn(false, 1, 1, corpBB1), new Pawn(false, 1, 2, corpBB1), 
+            new Pawn(false, 1, 3, corpKB), new Pawn(false, 1, 4, corpKB), new Pawn(false, 1, 5, corpBB2), 
+            new Pawn(false, 1, 6, corpBB2), new Pawn(false, 1, 7, corpBB2)
         },
         {
             new NullPiece(2, 0), new NullPiece(2, 1), new NullPiece(2, 2), 
@@ -40,14 +50,14 @@ public class GameBoard
             new NullPiece(5, 6), new NullPiece(5, 7)
         },
         {
-            new Pawn(true, 6, 0), new Pawn(true, 6, 1), new Pawn(true, 6, 2), 
-            new Pawn(true, 6, 3), new Pawn(true, 6, 4), new Pawn(true, 6, 5), 
-            new Pawn(true, 6, 6), new Pawn(true, 6, 7)
+            new Pawn(true, 6, 0, corpBW1), new Pawn(true, 6, 1, corpBW1), new Pawn(true, 6, 2, corpBW1), 
+            new Pawn(true, 6, 3, corpKW), new Pawn(true, 6, 4, corpKW), new Pawn(true, 6, 5, corpBW2), 
+            new Pawn(true, 6, 6, corpBW2), new Pawn(true, 6, 7, corpBW2)
         },
         {
-            new Rook(true, 7, 0), new Knight(true, 7, 1), new Bishop(true, 7, 2),
-            new Queen(true, 7, 3), new King(true, 7, 4), new Bishop(true, 7, 5),
-            new Knight(true, 7, 6), new Rook(true, 7, 7)
+            new Rook(true, 7, 0, corpKW), new Knight(true, 7, 1, corpBW1), new Bishop(true, 7, 2, corpBW1),
+            new Queen(true, 7, 3, corpKW), new King(true, 7, 4, corpKW), new Bishop(true, 7, 5, corpBW2),
+            new Knight(true, 7, 6, corpBW2), new Rook(true, 7, 7, corpKW)
         }
     };
     
@@ -91,7 +101,7 @@ public class GameBoard
     {
         String output = "It's currently " + (whiteMoving ? "white's" : "black's")
                 + " turn.\n" + (whiteMoving ? "White" : "Black") + " has used "
-                + actionsTaken + " of " + ACTIONS_PER_TURN + " actions this turn.\n";
+                + actionsTaken + " of " + (whiteMoving ? maxActionsWhite : maxActionsBlack) + " actions this turn.\n";
         
         for (int row = 0; row < tiles.length; row++)
         {
