@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
@@ -31,6 +32,9 @@ import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import java.lang.*;
+
+
 public class GameFrame extends JFrame implements ActionListener
 {
     CardLayout cardLayout;
@@ -47,8 +51,10 @@ public class GameFrame extends JFrame implements ActionListener
 
     String longMessage;
 
-    // GAME FRAME FOR OVERALL SET UP (UNIVERSAL
-    // BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static boolean whiteTurn = true; //true means it is white turn
+
+    // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
     {
         // INITIALIZATION OF CARD LAYOUT STYLE FOR THE MAIN PANEL AND FLOW LAYOUT STYLE
@@ -315,8 +321,18 @@ class GamePanel extends JPanel
                 System.out.println("not a piece. must select piece first");
                 return;
             }
-            System.out
-                    .println("handleSelection called, no previously selected" + " tile found so this is selectedTile");
+
+            System.out.println("handleSelection called, no previously selected"
+                    + " tile found so this is selectedTile");
+            
+          /*if the selected tile color does not match the color of the player's turn,
+            return an error message */
+            if(newTile.pieceAt.white != GameFrame.whiteTurn) { 
+                System.out.println("Not your turn");
+                return;
+             }
+            
+
 
             if (!newTile.pieceAt.getCorp().getHasActed())// if piece's corp has not already acted...
             {
@@ -348,6 +364,7 @@ class GamePanel extends JPanel
                     if (gBoard.actionsTaken >= gBoard.maxActionsWhite) // if max action limit is reach...
                     {
                         System.out.println("this is where the turn would end");
+                        GameFrame.whiteTurn = GameFrame.whiteTurn? false : true; //switches player turn after move is made
                         // TODO reset actions taken to 0 and switch whose turn it is
                     }
 
@@ -358,6 +375,7 @@ class GamePanel extends JPanel
             {
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
                 {
+                	
                     // TODO handle attack behavior here
                     selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
                     gBoard.actionsTaken++; // increment actionsTaken for this turn
@@ -365,6 +383,7 @@ class GamePanel extends JPanel
                     if (gBoard.actionsTaken >= gBoard.maxActionsWhite)
                     {
                         System.out.println("this is where the turn would end");
+                        GameFrame.whiteTurn = GameFrame.whiteTurn? false : true; //switches player turn after move is made
                         // TODO reset actions taken to 0 and switch whose turn it is
                         // TODO if selectedtile.pieceAt = enemyBishop, enemyMaxActions-- and bishop.reassignAll(kingCorp)
                     }
