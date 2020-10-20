@@ -41,8 +41,7 @@ public class GameFrame extends JFrame implements ActionListener
     GamePanel game;
     JButton goGame;
     JButton howTo;
-    JButton moveButton;
-    JButton attackButton;
+    JButton skipButton;
     ImageIcon instruct = new ImageIcon("Images/medChess-1.jpg");
 
     String longMessage;
@@ -61,16 +60,11 @@ public class GameFrame extends JFrame implements ActionListener
         mainPanel.add(menu, "menu");
         mainPanel.add(game, "game");
 
-        //MOVE AND ATTACK BUTTONS (HIDDEN UNTIL GAME PANEL IS SHOWN) -- THESE ARE ADDED TO THE CONTROL PANEL
-    	moveButton = new JButton("MOVE");
-    	moveButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
-    	moveButton.setPreferredSize(new Dimension(493,100));
-    	moveButton.addActionListener(this);
-    	
-    	attackButton = new JButton("ATTACK");
-    	attackButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
-    	attackButton.setPreferredSize(new Dimension(493,100));;
-    	attackButton.addActionListener(this);
+        //SKIP TURN BUTTON (HIDDEN UNTIL GAME PANEL IS SHOWN) -- ADDED TO THE CONTROL PANEL
+    	skipButton = new JButton("SKIP TURN");
+    	skipButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
+    	skipButton.setPreferredSize(new Dimension(935,100));
+    	skipButton.addActionListener(this);
 
     	//HOW TO PLAY AND PLAY BUTTONS 
         goGame = new JButton();
@@ -79,13 +73,11 @@ public class GameFrame extends JFrame implements ActionListener
 
         howTo = new JButton();
         howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
-        //howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
         howTo.addActionListener(this);
 
         //CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START)
     	controlPanel = new JPanel(flowLayout);
-    	controlPanel.add(moveButton);
-    	controlPanel.add(attackButton);
+    	controlPanel.add(skipButton);
 
         //PUSH COMPONENTS TO GAMEFRAME (JFRAME)
         add(mainPanel);
@@ -145,25 +137,9 @@ public class GameFrame extends JFrame implements ActionListener
 
             JOptionPane.showMessageDialog(null, longMessage, "How To Play", JOptionPane.INFORMATION_MESSAGE, instruct);
         }
-        else if (e.getSource() == moveButton)
+        else if (e.getSource() == skipButton)
         {
-        	//SHOWS CHANGE IN STATE TO MOVE GAMEPLAY
-        	attackButton.setBackground(null);
-        	attackButton.setForeground(Color.black);
-        	moveButton.setBackground(new Color(136, 0, 27));
-        	moveButton.setForeground(Color.white);
         	
-        	//MOVEMENT STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
-        }
-        else if (e.getSource() == attackButton)
-        {
-        	//SHOWS CHANGE IN STATE TO ATTACK GAMEPLAY
-        	moveButton.setBackground(null);
-        	moveButton.setForeground(Color.black);
-        	attackButton.setBackground(new Color(136, 0, 27));
-        	attackButton.setForeground(Color.white);
-        	
-        	//ATTACKING STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
         }
     }
 
@@ -201,17 +177,10 @@ class MenuPanel extends JPanel
         // LOGO
         JLabel logoImage = new JLabel();
         logoImage.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
-        //logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
         logoImage.setVerticalAlignment(SwingConstants.CENTER);
         logoImage.setHorizontalAlignment(SwingConstants.CENTER);
         add(logoImage);
 
-        // TEAM NAME
-        //JLabel teamName = new JLabel("Team 4A");
-        //teamName.setFont(new Font("Tahoma", Font.PLAIN, 44));
-        //teamName.setVerticalAlignment(SwingConstants.CENTER);
-        //teamName.setHorizontalAlignment(SwingConstants.CENTER);
-        //add(teamName);
     }
 
     @Override
