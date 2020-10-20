@@ -378,6 +378,8 @@ class GamePanel extends JPanel
                     selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
                     gBoard.actionsTaken++; // increment actionsTaken for this turnAttack piece = new Attack();
                     
+                    Attack piece = new Attack();
+                    
                     if(piece.tryAttack(selectedTile.pieceAt, selectedTile2.pieceAt, selectedTile.pieceAt.hasMoved)){
                        piece.killPiece(selectedTile2.pieceAt);
                         gBoard.movePiece(prevLoc, newLoc);
