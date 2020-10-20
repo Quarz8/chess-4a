@@ -17,6 +17,7 @@ public abstract class Piece
 	int column;
     boolean white;
     char charRep;
+    boolean hasMoved;
     int[][] directions =
 	{
 			{0, 1}, //S
