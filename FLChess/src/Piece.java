@@ -144,8 +144,8 @@ public abstract class Piece
     {
         for (int i = 0; i < this.corp.units.size(); i++) // for every piece in this piece's corp...
         {
-            this.corp.units.get(0).setCorp(kingCorp); // set piece's corp to kingCorp
-            kingCorp.addUnit(this.corp.units.remove(0)); // remove piece from its corp and add to kingCorp
+            this.corp.units.get(i).setCorp(kingCorp); // set piece's corp to kingCorp
+            kingCorp.addUnit(this.corp.units.get(i)); // and add to kingCorp
         }
     }
 }

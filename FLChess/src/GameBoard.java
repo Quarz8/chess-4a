@@ -50,14 +50,14 @@ public class GameBoard
             new NullPiece(5, 6), new NullPiece(5, 7)
         },
         {
-            new Pawn(true, 6, 0, corpBB1), new Pawn(true, 6, 1, corpBB1), new Pawn(true, 6, 2, corpBB1), 
-            new Pawn(true, 6, 3, corpKW), new Pawn(true, 6, 4, corpKW), new Pawn(true, 6, 5, corpBB2), 
-            new Pawn(true, 6, 6, corpBB2), new Pawn(true, 6, 7, corpBB2)
+            new Pawn(true, 6, 0, corpBW1), new Pawn(true, 6, 1, corpBW1), new Pawn(true, 6, 2, corpBW1), 
+            new Pawn(true, 6, 3, corpKW), new Pawn(true, 6, 4, corpKW), new Pawn(true, 6, 5, corpBW2), 
+            new Pawn(true, 6, 6, corpBW2), new Pawn(true, 6, 7, corpBW2)
         },
         {
-            new Rook(true, 7, 0, corpKW), new Knight(true, 7, 1, corpBB1), new Bishop(true, 7, 2, corpBB1),
-            new Queen(true, 7, 3, corpKW), new King(true, 7, 4, corpKW), new Bishop(true, 7, 5, corpBB2),
-            new Knight(true, 7, 6, corpBB2), new Rook(true, 7, 7, corpKW)
+            new Rook(true, 7, 0, corpKW), new Knight(true, 7, 1, corpBW1), new Bishop(true, 7, 2, corpBW1),
+            new Queen(true, 7, 3, corpKW), new King(true, 7, 4, corpKW), new Bishop(true, 7, 5, corpBW2),
+            new Knight(true, 7, 6, corpBW2), new Rook(true, 7, 7, corpKW)
         }
     };
     

@@ -318,11 +318,18 @@ class GamePanel extends JPanel
             System.out
                     .println("handleSelection called, no previously selected" + " tile found so this is selectedTile");
 
-            // save selected tile
-            selectedTile = newTile;
-            highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions, true);
-            highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
-                    false);
+            if (!newTile.pieceAt.getCorp().getHasActed())// if piece's corp has not already acted...
+            {
+                // save selected tile
+                selectedTile = newTile;
+                highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
+                        true);
+                highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
+                        false);
+            }
+            else {
+                System.out.println("This corp has already acted");
+            }
 
         }
         else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
@@ -335,7 +342,15 @@ class GamePanel extends JPanel
             {
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted move tile
                 {
-                    gBoard.movePiece(prevLoc, newLoc);
+                    selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                    gBoard.actionsTaken++; // increment actionsTaken for this turn
+                    gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
+                    if (gBoard.actionsTaken >= gBoard.maxActionsWhite) // if max action limit is reach...
+                    {
+                        System.out.println("this is where the turn would end");
+                        // TODO reset actions taken to 0 and switch whose turn it is
+                    }
+
                     break;
                 }
             }
@@ -344,6 +359,15 @@ class GamePanel extends JPanel
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
                 {
                     // TODO handle attack behavior here
+                    selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                    gBoard.actionsTaken++; // increment actionsTaken for this turn
+                    gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
+                    if (gBoard.actionsTaken >= gBoard.maxActionsWhite)
+                    {
+                        System.out.println("this is where the turn would end");
+                        // TODO reset actions taken to 0 and switch whose turn it is
+                        // TODO if selectedtile.pieceAt = enemyBishop, enemyMaxActions-- and bishop.reassignAll(kingCorp)
+                    }
                 }
             }
 
