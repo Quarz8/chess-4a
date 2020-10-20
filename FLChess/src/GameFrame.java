@@ -365,6 +365,14 @@ class GamePanel extends JPanel
                     {
                         System.out.println("this is where the turn would end");
                         GameFrame.whiteTurn = GameFrame.whiteTurn? false : true; //switches player turn after move is made
+                        gBoard.actionsTaken=0; // reset actionsTaken
+                        // reset all corp's hasActed to false
+                        gBoard.corpBB1.setHasActed(false);
+                        gBoard.corpBB2.setHasActed(false);
+                        gBoard.corpKB.setHasActed(false);
+                        gBoard.corpBW1.setHasActed(false);
+                        gBoard.corpBW2.setHasActed(false);
+                        gBoard.corpKW.setHasActed(false);
                         // TODO reset actions taken to 0 and switch whose turn it is
                     }
 
@@ -389,7 +397,14 @@ class GamePanel extends JPanel
                     {
                         System.out.println("this is where the turn would end");
                         GameFrame.whiteTurn = GameFrame.whiteTurn? false : true; //switches player turn after move is made
-                        // TODO reset actions taken to 0 and switch whose turn it is
+                        gBoard.actionsTaken=0; // reset actionsTaken
+                        // reset all corp's hasActed to false
+                        gBoard.corpBB1.setHasActed(false);
+                        gBoard.corpBB2.setHasActed(false);
+                        gBoard.corpKB.setHasActed(false);
+                        gBoard.corpBW1.setHasActed(false);
+                        gBoard.corpBW2.setHasActed(false);
+                        gBoard.corpKW.setHasActed(false);
                         // TODO if selectedtile.pieceAt = enemyBishop, enemyMaxActions-- and bishop.reassignAll(kingCorp)
                     }
                 }
