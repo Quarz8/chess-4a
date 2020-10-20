@@ -407,6 +407,7 @@ class GamePanel extends JPanel
                         gBoard.corpKW.setHasActed(false);
                         // TODO if selectedtile.pieceAt = enemyBishop, enemyMaxActions-- and bishop.reassignAll(kingCorp)
                     }
+                    break;
                 }
             }
 
