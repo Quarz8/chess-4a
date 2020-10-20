@@ -375,11 +375,14 @@ class GamePanel extends JPanel
             {
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
                 {
-                	
-                    // TODO handle attack behavior here
                     selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
-                    gBoard.actionsTaken++; // increment actionsTaken for this turn
-                    gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
+                    gBoard.actionsTaken++; // increment actionsTaken for this turnAttack piece = new Attack();
+                    
+                    if(piece.tryAttack(selectedTile.pieceAt, selectedTile2.pieceAt, selectedTile.pieceAt.hasMoved)){
+                       piece.killPiece(selectedTile2.pieceAt);
+                        gBoard.movePiece(prevLoc, newLoc);
+                        }
+                        
                     if (gBoard.actionsTaken >= gBoard.maxActionsWhite)
                     {
                         System.out.println("this is where the turn would end");

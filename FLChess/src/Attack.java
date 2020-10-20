@@ -3,6 +3,9 @@ public class Attack
 
     boolean attackSuccess = false;
 
+    Attack(){
+    }
+
     // public enum PieceType
     // {
     // KING, QUEEN, KNIGHT, BISHOP, ROOK, PAWN
@@ -12,6 +15,8 @@ public class Attack
     // {
     // WHITE, BLACK
     // }
+
+
 
     public boolean tryAttack(Piece attacker, Piece victim, boolean hasMoved)
     {
@@ -154,7 +159,13 @@ public class Attack
         {
             attackSuccess = false;
         }
-
+        if (!attackSuccess){
+            System.out.println("Didn't roll high enough!");
+        }
         return attackSuccess;
+    }
+
+    public void killPiece(Piece victim){
+         victim = null;
     }
 }
