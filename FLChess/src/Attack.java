@@ -1,22 +1,8 @@
 public class Attack
 {
 
-    boolean attackSuccess = false;
-
-    Attack(){
-    }
-
-    // public enum PieceType
-    // {
-    // KING, QUEEN, KNIGHT, BISHOP, ROOK, PAWN
-    // }
-
-    // public enum Team
-    // {
-    // WHITE, BLACK
-    // }
-
-
+    private boolean attackSuccess = false;
+    private int dieNum = DieRoll.roll();
 
     public boolean tryAttack(Piece attacker, Piece victim, boolean hasMoved)
     {
@@ -24,7 +10,7 @@ public class Attack
         char aChar = Character.toLowerCase(attacker.charRep);
         char vChar = Character.toLowerCase(victim.charRep);
 
-        int dieNum = DieRoll.roll();
+        //int dieNum = DieRoll.roll();
 
         System.out.println("You roll: " + dieNum);
         if (hasMoved)
@@ -155,17 +141,19 @@ public class Attack
             }
         }
 
-        else
+        if (!attackSuccess)
         {
-            attackSuccess = false;
-        }
-        if (!attackSuccess){
             System.out.println("Didn't roll high enough!");
         }
         return attackSuccess;
     }
+    
+    public int getDieNum() {
+        return dieNum;
+    }
 
-    public void killPiece(Piece victim){
-         victim = null;
+    public void killPiece(Piece victim)
+    {
+        victim = null;
     }
 }
