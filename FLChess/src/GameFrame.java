@@ -239,11 +239,13 @@ class GamePanel extends JPanel
     TilePanel selectedTile2;
     Collection<int[]> highlightedMoveTiles = new ArrayList<>();
     Collection<int[]> highlightedAttackTiles = new ArrayList<>();
+    Collection<int[]> highlightedCorpTiles = new ArrayList<>();
     final Color DARK_COLOR = new Color(136, 0, 27);
     final Color LIGHT_COLOR = new Color(255, 206, 158);
     final Color SELECT_COLOR = new Color(78, 245, 98);
     final Color MOVE_COLOR = new Color(122, 77, 201);
     final Color ATTACK_COLOR = new Color(184, 35, 9);
+    final Color CORP_COLOR = new Color(186, 189, 175);
     final TilePanel NULL_TILE = new TilePanel(this, new BorderLayout());
 
     public GamePanel()
@@ -288,9 +290,8 @@ class GamePanel extends JPanel
 
         // highlighting tiles here
         if (selectedTile.pieceAt.charRep != new NullPiece().charRep)
-        {
             pnlChessCells[selectedTile.pieceAt.row][selectedTile.pieceAt.column].setBackground(SELECT_COLOR);
-        }
+        
         for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
         {
             int[] highlightPos = iterator.next();
@@ -301,15 +302,20 @@ class GamePanel extends JPanel
             int[] highlightPos = iterator.next();
             pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(ATTACK_COLOR);
         }
+        for (Iterator<int[]> iterator = highlightedCorpTiles.iterator(); iterator.hasNext();)
+        {
+            int[] highlightPos = iterator.next();
+            pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(CORP_COLOR);
+        }
     }
 
     public void handleSelection(TilePanel newTile)
     {
         // new tile information
         int[] newLoc = newTile.getBoardLoc();
-        gBoard.tiles[newLoc[0]][newLoc[1]].toSysOut();
+//        gBoard.tiles[newLoc[0]][newLoc[1]].toSysOut();
 
-        if (selectedTile.pieceAt.charRep == new NullPiece().charRep)
+        if (!gBoard.gameOver && selectedTile.pieceAt.charRep == new NullPiece().charRep)
         // HANDLING FIRST SELECTION
         {
             // if empty tile/null piece, do nothing and break out
@@ -347,7 +353,7 @@ class GamePanel extends JPanel
             }
 
         }
-        else if (selectedTile2.pieceAt.charRep == new NullPiece().charRep)
+        else if (!gBoard.gameOver && selectedTile2.pieceAt.charRep == new NullPiece().charRep)
         // HANDLING SECOND SELECTION
         {
             // info of previously selected tile
@@ -429,7 +435,28 @@ class GamePanel extends JPanel
             highlightedMoveTiles.clear();
             highlightedAttackTiles.clear();
         }
+        else
+        	System.out.println("handleSelection: The game is over, no more actions");
 
+        // testing if game is over, inelegant but whatevs
+        boolean whiteKingDead = true;
+        boolean blackKingDead = true;
+        for (int row = 0; row < gBoard.tiles.length; row++)
+        {
+        	for (int column = 0; column < gBoard.tiles[row].length; column++)
+        	{
+        		if (gBoard.tiles[row][column].charRep == 'k')
+        			whiteKingDead = false;
+        		if (gBoard.tiles[row][column].charRep == 'K')
+        			blackKingDead = false;
+        	}
+        }
+        if (whiteKingDead || blackKingDead)
+        {
+        	System.out.println((whiteKingDead ? "White" : "Black") + " king is dead! Game is now over");
+        	gBoard.gameOver = true;
+        }
+        
         this.updateBoard(gBoard);
     }
 

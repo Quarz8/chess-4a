@@ -2,6 +2,7 @@ public class GameBoard
 {
     Piece tiles[][] = new Piece[8][8];
     int actionsTaken = 0; // actions taken on turn so far
+    boolean gameOver;
     boolean whiteMoving;
     
     int maxActionsWhite = 3; // maximum number of actions white can perform
@@ -64,6 +65,7 @@ public class GameBoard
     public GameBoard()
     {
         this.whiteMoving = true;
+        this.gameOver = false;
         for (int row = 0; row < tiles.length; row++)
         {
         	for (int column = 0; column < tiles[row].length; column++)
