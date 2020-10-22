@@ -135,7 +135,17 @@ public class GameFrame extends JFrame implements ActionListener
         }
         else if (e.getSource() == skipButton)
         {
-        	
+        	System.out.println("END OF TURN");
+        	GamePanel.getBoard().whiteMoving = GamePanel.getBoard().whiteMoving ? false : true; // switches player turn after move is
+                                                                    // made
+        	GamePanel.getBoard().actionsTaken = 0; // reset actionsTaken
+            // reset all corp's hasActed to false
+        	GamePanel.getBoard().corpBB1.setHasActed(false);
+        	GamePanel.getBoard().corpBB2.setHasActed(false);
+        	GamePanel.getBoard().corpKB.setHasActed(false);
+        	GamePanel.getBoard().corpBW1.setHasActed(false);
+        	GamePanel.getBoard().corpBW2.setHasActed(false);
+        	GamePanel.getBoard().corpKW.setHasActed(false);
         }
     }
 
@@ -162,8 +172,7 @@ public class GameFrame extends JFrame implements ActionListener
     }
 }
 
-// MAIN MENU
-// PANEL/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MAIN MENU PANEL/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MenuPanel extends JPanel
 {
     public MenuPanel()
@@ -174,17 +183,10 @@ class MenuPanel extends JPanel
         // LOGO
         JLabel logoImage = new JLabel();
         logoImage.setIcon(new ImageIcon(GameFrame.class.getResource("Images/Title.png")));
-        // logoImage.setFont(new Font("Tahoma", Font.PLAIN, 44));
         logoImage.setVerticalAlignment(SwingConstants.CENTER);
         logoImage.setHorizontalAlignment(SwingConstants.CENTER);
         add(logoImage);
 
-        // TEAM NAME
-        // JLabel teamName = new JLabel("Team 4A");
-        // teamName.setFont(new Font("Tahoma", Font.PLAIN, 44));
-        // teamName.setVerticalAlignment(SwingConstants.CENTER);
-        // teamName.setHorizontalAlignment(SwingConstants.CENTER);
-        // add(teamName);
     }
 
     @Override
@@ -194,11 +196,10 @@ class MenuPanel extends JPanel
     }
 }
 
-// ACTUAL GAMEPLAY
-// PANEL////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ACTUAL GAMEPLAY PANEL////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GamePanel extends JPanel
 {
-    GameBoard gBoard = new GameBoard();
+    static GameBoard gBoard = new GameBoard();
     TilePanel[][] pnlChessCells = new TilePanel[gBoard.tiles.length][gBoard.tiles[0].length];
     TilePanel selectedTile;
     TilePanel selectedTile2;
@@ -228,6 +229,12 @@ class GamePanel extends JPanel
             }
         }
     }
+    
+    public static GameBoard getBoard()
+    {
+    	return gBoard;
+    }
+    
 
     public void updateBoard(GameBoard gBoard)
     {
