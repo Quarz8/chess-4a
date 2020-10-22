@@ -27,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
@@ -36,26 +37,21 @@ import java.lang.*;
 
 public class GameFrame extends JFrame implements ActionListener
 {
-    CardLayout cardLayout;
+	CardLayout cardLayout;
     FlowLayout flowLayout;
-    JPanel mainPanel;
-    JPanel controlPanel;
+    JPanel mainPanel, controlPanel, firstInstructPanel, secondInstructPanel;
+    JScrollPane scroll1, scroll2;
+    JTabbedPane tabs;
     MenuPanel menu;
     GamePanel game;
-    JButton goGame;
-    JButton howTo;
-    JButton moveButton;
-    JButton attackButton;
-    ImageIcon instruct = new ImageIcon("Images/medChess-1.jpg");
+    JButton goGame, howTo;
+    JButton skipButton;
+    ImageIcon instruct, instruct2;
 
-    String longMessage;
-
-    // GAME FRAME FOR OVERALL SET UP (UNIVERSAL
-    // BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
     {
-        // INITIALIZATION OF CARD LAYOUT STYLE FOR THE MAIN PANEL AND FLOW LAYOUT STYLE
-        // FOR CONTROL PANEL -- THE MENU/GAME PANELS CONTAINED IN MAIN PANEL
+        // INITIALIZATION OF CARD LAYOUT STYLE FOR THE MAIN PANEL AND FLOW LAYOUT STYLE FOR CONTROL PANEL -- THE MENU/GAME PANELS CONTAINED IN MAIN PANEL
         cardLayout = new CardLayout();
         flowLayout = new FlowLayout(SwingConstants.LEFT);
 
@@ -66,18 +62,11 @@ public class GameFrame extends JFrame implements ActionListener
         mainPanel.add(menu, "menu");
         mainPanel.add(game, "game");
 
-        // MOVE AND ATTACK BUTTONS (HIDDEN UNTIL GAME PANEL IS SHOWN) -- THESE ARE ADDED
-        // TO THE CONTROL PANEL
-        moveButton = new JButton("MOVE");
-        moveButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        moveButton.setPreferredSize(new Dimension(493, 100));
-        moveButton.addActionListener(this);
-
-        attackButton = new JButton("ATTACK");
-        attackButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        attackButton.setPreferredSize(new Dimension(493, 100));
-        ;
-        attackButton.addActionListener(this);
+        // SKIP TURN BUTTON (HIDDEN UNTIL GAME PANEL IS SHOWN) -- ADDED TO THE CONTROL PANEL
+    	skipButton = new JButton("SKIP TURN");
+    	skipButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
+    	skipButton.setPreferredSize(new Dimension(935,100));
+    	skipButton.addActionListener(this);
 
         // HOW TO PLAY AND PLAY BUTTONS
         goGame = new JButton();
@@ -86,13 +75,11 @@ public class GameFrame extends JFrame implements ActionListener
 
         howTo = new JButton();
         howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
-        // howTo.setFont(new Font("Tahoma", Font.PLAIN, 30));
         howTo.addActionListener(this);
 
         // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START)
         controlPanel = new JPanel(flowLayout);
-        controlPanel.add(moveButton);
-        controlPanel.add(attackButton);
+    	controlPanel.add(skipButton);
 
         // PUSH COMPONENTS TO GAMEFRAME (JFRAME)
         add(mainPanel);
@@ -120,57 +107,35 @@ public class GameFrame extends JFrame implements ActionListener
         }
         else if (e.getSource() == howTo)
         {
-            longMessage = "CAPTURING PIECES "
-                    + "\nFuzzy-Logic Chess (F-L Chess) introduces uncertainty to the act of capturing a piece so\r\n"
-                    + "that players must use reasoning with uncertainty (fuzzy logic: probability) in planning their strategies. The\r\n"
-                    + "attacking player rolls a die to\r" + " determine if a capture is successful.\r"
-                    + " The die roll needed to capture a piece\r\n" + "depends on the combination of the\r"
-                    + " attacking piece and the defending\r" + " piece, as shown in the Capture Table.\r\n"
-                    + "    - When an attack is successful, the attacking piece moves into the square of the captured piece.\r\n"
-                    + "    - When an attack is unsuccessful, the attacking piece remains in the square it attacked from.\r\n"
-                    + "    - All pieces may attempt to capture an opposing piece in any direction (left, right, up, down, diagonal).\n\n"
-                    +
+        	// DEFINING JTABBEDPANE, JPANELS, JSCROLLS, AND JLABELS
+        	tabs = new JTabbedPane();
+        	firstInstructPanel = new JPanel();
+        	secondInstructPanel = new JPanel();
+			JLabel first = new JLabel();
+			JLabel second = new JLabel();        	
+        	scroll1 = new JScrollPane(firstInstructPanel);
+        	scroll2 = new JScrollPane(secondInstructPanel);
+        	
+        	// ADDS INSTRUCTION IMAGES AS ICONS ON JLABELS AND MAKES JOPTIONPANE SCROLLABLE
+        	instruct = new ImageIcon(GameFrame.class.getResource("Images/FL-Chess__DistAI_V5c2-page-001.jpg"));
+        	instruct2 = new ImageIcon(GameFrame.class.getResource("Images/FL-Chess__DistAI_V5c2-page-002.jpg"));
+        	first.setIcon(instruct);
+        	second.setIcon(instruct2);
+            scroll1.setPreferredSize(new Dimension(1210, 700));
+            scroll2.setPreferredSize(new Dimension(1210, 700));
 
-                    "MOUNTED KNIGHTS AND ROYALTY\r\n" + "In F-L Medieval Chess, the King,"
-                    + " Queen, and Knights may each move in any direction, \nand do not have to move in a straight line. Not counting"
-                    + " the starting square, but counting the final square, \nthe King and Queen may move three squares, and the"
-                    + " Knights five squares. They may not jump over \nor pass through an occupied square. The King and Queen"
-                    + " represent the elite royalty, more heavily \narmored than knights, but slower.\r\n"
-                    + "Knights (only) may combine movement with a capture in the same action, attacking any adjacent enemy\r\n"
-                    + "piece after their movement, but subtract one from the die roll.\r\n\n"
-                    + "THE INFANTRY (Pawns and Bishop)\r\n"
-                    + "Pawns represent simple infantry with minimal training and arms, while Bishops represent pikemen with long\r\n"
-                    + "pikes or halberds with formal training and experience.\r\n"
-                    + "- Pawns and Bishops may move one square and attack in a forward direction only, moving or attacking either\r\n"
-                    + "  directly ahead or to either forward diagonal toward the opposing player.\r\n"
-                    + "- Pawns are never promoted after reaching the eighth rank (the opponent's home row).\r\n"
-                    + "- Pawns may not move two squares forward when they have not yet moved in the game\r\n\n"
-                    + "ARCHERS (Rook/Castle)\r\n"
-                    + "The Rook represents a company of archers, who may move a single square in any direction. Archers may\r\n"
-                    + "attack any piece by shooting over up to two squares (not counting the square with the Rook or the square\r\n"
-                    + "with the enemy piece). ";
-
-            JOptionPane.showMessageDialog(null, longMessage, "How To Play", JOptionPane.INFORMATION_MESSAGE, instruct);
+            // ADDS COMPONENTS TO PANELS AND THEN TABS FOR JOPTIONPANE
+        	firstInstructPanel.add(first);
+        	secondInstructPanel.add(second);
+        	tabs.add(scroll1, "Page 1");
+        	tabs.add(scroll2, "Page 2");
+        	
+        	// DISPLAY JOPTIONPANE
+            JOptionPane.showMessageDialog(null, tabs, "How To Play", JOptionPane.PLAIN_MESSAGE);
         }
-        else if (e.getSource() == moveButton)
+        else if (e.getSource() == skipButton)
         {
-            // SHOWS CHANGE IN STATE TO MOVE GAMEPLAY
-            attackButton.setBackground(null);
-            attackButton.setForeground(Color.black);
-            moveButton.setBackground(new Color(136, 0, 27));
-            moveButton.setForeground(Color.white);
-
-            // MOVEMENT STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
-        }
-        else if (e.getSource() == attackButton)
-        {
-            // SHOWS CHANGE IN STATE TO ATTACK GAMEPLAY
-            moveButton.setBackground(null);
-            moveButton.setForeground(Color.black);
-            attackButton.setBackground(new Color(136, 0, 27));
-            attackButton.setForeground(Color.white);
-
-            // ATTACKING STATE IMPLEMENTATION COULD POTENTIALLY GO HERE
+        	
         }
     }
 
