@@ -136,16 +136,16 @@ public class GameFrame extends JFrame implements ActionListener
         else if (e.getSource() == skipButton)
         {
         	System.out.println("END OF TURN");
-        	GamePanel.getBoard().whiteMoving = GamePanel.getBoard().whiteMoving ? false : true; // switches player turn after move is
+        	game.gBoard.whiteMoving = game.gBoard.whiteMoving ? false : true; // switches player turn after move is
                                                                     // made
-        	GamePanel.getBoard().actionsTaken = 0; // reset actionsTaken
+        	game.gBoard.actionsTaken = 0; // reset actionsTaken
             // reset all corp's hasActed to false
-        	GamePanel.getBoard().corpBB1.setHasActed(false);
-        	GamePanel.getBoard().corpBB2.setHasActed(false);
-        	GamePanel.getBoard().corpKB.setHasActed(false);
-        	GamePanel.getBoard().corpBW1.setHasActed(false);
-        	GamePanel.getBoard().corpBW2.setHasActed(false);
-        	GamePanel.getBoard().corpKW.setHasActed(false);
+        	game.gBoard.corpBB1.setHasActed(false);
+        	game.gBoard.corpBB2.setHasActed(false);
+        	game.gBoard.corpKB.setHasActed(false);
+        	game.gBoard.corpBW1.setHasActed(false);
+        	game.gBoard.corpBW2.setHasActed(false);
+        	game.gBoard.corpKW.setHasActed(false);
         }
     }
 
@@ -199,7 +199,7 @@ class MenuPanel extends JPanel
 // ACTUAL GAMEPLAY PANEL////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GamePanel extends JPanel
 {
-    static GameBoard gBoard = new GameBoard();
+    GameBoard gBoard = new GameBoard();
     TilePanel[][] pnlChessCells = new TilePanel[gBoard.tiles.length][gBoard.tiles[0].length];
     TilePanel selectedTile;
     TilePanel selectedTile2;
@@ -228,11 +228,6 @@ class GamePanel extends JPanel
                 this.add(pnlChessCells[row][column]);
             }
         }
-    }
-    
-    public static GameBoard getBoard()
-    {
-    	return gBoard;
     }
     
 
