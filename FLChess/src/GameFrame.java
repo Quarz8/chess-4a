@@ -46,7 +46,8 @@ public class GameFrame extends JFrame implements ActionListener
     GamePanel game;
     JButton goGame, howTo;
     JButton skipButton;
-    ImageIcon instruct, instruct2;
+    static JLabel dieDisplay;
+    ImageIcon instruct, instruct2, dieIcon;
 
     // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
@@ -65,7 +66,7 @@ public class GameFrame extends JFrame implements ActionListener
         // SKIP TURN BUTTON (HIDDEN UNTIL GAME PANEL IS SHOWN) -- ADDED TO THE CONTROL PANEL
     	skipButton = new JButton("SKIP TURN");
     	skipButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
-    	skipButton.setPreferredSize(new Dimension(935,100));
+    	skipButton.setPreferredSize(new Dimension(830,100));
     	skipButton.addActionListener(this);
 
         // HOW TO PLAY AND PLAY BUTTONS
@@ -77,9 +78,14 @@ public class GameFrame extends JFrame implements ActionListener
         howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
         howTo.addActionListener(this);
 
-        // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START)
+        // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START) INCLUDES DIE ROLL DISPLAY
         controlPanel = new JPanel(flowLayout);
     	controlPanel.add(skipButton);
+    	
+		dieDisplay = new JLabel();
+		dieDisplay.setPreferredSize(new Dimension(100,100));
+		dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die1.png")));
+		controlPanel.add(dieDisplay);
 
         // PUSH COMPONENTS TO GAMEFRAME (JFRAME)
         add(mainPanel);
@@ -361,11 +367,13 @@ class GamePanel extends JPanel
                         piece.killPiece(selectedTile2.pieceAt);
                         gBoard.movePiece(prevLoc, newLoc);
                         
+                        piece.setDieDisplay();
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
                         // TODO display roll in GUI, piece.getDieNum();
                     }
                     else // if attack failed
                     {
+                    	piece.setDieDisplay();
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
                         // TODO display roll in GUI, piece.getDieNum();
                     }
