@@ -336,6 +336,7 @@ class GamePanel extends JPanel
             {
                 // save selected tile
                 selectedTile = newTile;
+                System.out.println(newTile.pieceAt.getCorp());
                 highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
                         true);
                 highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
@@ -360,7 +361,7 @@ class GamePanel extends JPanel
                     selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
                     gBoard.actionsTaken++; // increment actionsTaken for this turn
                     gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
-                    if (gBoard.actionsTaken >= gBoard.maxActionsWhite) // if max action limit is reach...
+                    if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack)) // if max action limit is reach...
                     {
                         System.out.println("END OF TURN");
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
@@ -391,34 +392,76 @@ class GamePanel extends JPanel
 
                     if (piece.tryAttack(selectedTile.pieceAt, selectedTile2.pieceAt, selectedTile.pieceAt.hasMoved)) // if attack succeeds...
                     {
-                        piece.killPiece(selectedTile2.pieceAt);
+                    	
+                    	if(selectedTile2.pieceAt.charRep == 'b') {
+                        	
+                        	System.out.println("HERE");
+                    		selectedTile2.pieceAt.reassignAll(gBoard.corpKB);
+                    		
+                    		gBoard.maxActionsBlack--;
+                    	}
+                    	else if(selectedTile2.pieceAt.charRep == 'B') {
+                        
+                    		System.out.println("HERE");
+                    		selectedTile2.pieceAt.reassignAll(gBoard.corpKW);
+                    		gBoard.maxActionsWhite--;
+                    	}
+                        //piece.killPiece(selectedTile2.pieceAt);
                         gBoard.movePiece(prevLoc, newLoc);
                         
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
                         // TODO display roll in GUI, piece.getDieNum();
+                        
+                        
                     }
                     else // if attack failed
                     {
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
                         // TODO display roll in GUI, piece.getDieNum();
                     }
-
-                    if (gBoard.actionsTaken >= gBoard.maxActionsWhite)
+                    
+                    if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack))
                     {
                         System.out.println("END OF TURN");
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
                                                                                 // made
                         gBoard.actionsTaken = 0; // reset actionsTaken
                         // reset all corp's hasActed to false
-                        gBoard.corpBB1.setHasActed(false);
-                        gBoard.corpBB2.setHasActed(false);
+                        
+                        //if(gBoard.corpBB1.units.get(0) != null)
+                        	gBoard.corpBB1.setHasActed(false);
+                        
+                        //if(gBoard.corpBB2.units.get(0) != null)
+                        	gBoard.corpBB2.setHasActed(false);
+                        
                         gBoard.corpKB.setHasActed(false);
-                        gBoard.corpBW1.setHasActed(false);
-                        gBoard.corpBW2.setHasActed(false);
+                        
+                        //if(gBoard.corpBW1.units.get(0) != null)
+                        	gBoard.corpBW1.setHasActed(false);
+                        
+                        //if(gBoard.corpBW1.units.get(0) != null)
+                        	gBoard.corpBW2.setHasActed(false);
+                        
                         gBoard.corpKW.setHasActed(false);
+                       
+                        	//gBoard.maxActionsBlack
+                        	//if(gBoard.whiteMoving)
+                        	//Bishop.reassignAll(gBoard.corpKW);
+                        }
+                    
+                   /* if(Attack.enemyBishop() == false) {
+                    	if(gBoard.whiteMoving) {
+                    		gBoard.maxActionsWhite = 2;
+                    		Piece.reassignAll(corpKW);
+                    		
+                    	}
+                    	else
+                    		gBoard.maxActionsBlack = 2;
+                    	
+                    	*/
                         // TODO if selectedtile.pieceAt = enemyBishop, enemyMaxActions-- and
                         // bishop.reassignAll(kingCorp)
-                    }
+                    
                     break;
                 }
             }

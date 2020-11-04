@@ -29,8 +29,9 @@ public class Attack
             }
             else if (vChar == 'b')
             { // attacking bishop
-                if (dieNum >= 5)
+                if (dieNum >= 5) {
                     attackSuccess = true;
+                }
             }
             else
             {
@@ -51,6 +52,11 @@ public class Attack
             { // attacking bishop/knight/pawn
                 if (dieNum >= 5)
                     attackSuccess = true;
+            }
+            else if(vChar == 'b') {
+            	if(dieNum >= 5) {
+            		attackSuccess = true;
+            	}
             }
             else
             {
@@ -87,10 +93,23 @@ public class Attack
                 if (dieNum >= 2)
                     attackSuccess = true;
             }
-            else if (vChar == 'n' || vChar == 'b')
+           /* else if (vChar == 'n' || vChar == 'b')
             { // attacking knight/bishop
                 if (dieNum >= 4)
                     attackSuccess = true;
+            }
+            */
+            else if (vChar == 'n')
+            { // attacking knight/bishop
+                if (dieNum >= 4)
+                    attackSuccess = true;
+            }
+            else if (vChar == 'b')
+            { // attacking knight/bishop
+                if (dieNum >= 4) {
+                    attackSuccess = true;
+                }
+                	
             }
             else if (vChar == 'r')
             { // attacking rook
@@ -112,10 +131,15 @@ public class Attack
                 if (dieNum >= 2)
                     attackSuccess = true;
             }
-            else if (vChar == 'k' || vChar == 'q' || vChar == 'n' || vChar == 'b')
+            else if (vChar == 'k' || vChar == 'q' || vChar == 'n')
             { // attacking king/queen/knight/bishop
                 if (dieNum >= 4)
                     attackSuccess = true;
+            }
+            else if(vChar == 'b') {
+            	if(dieNum >= 4) {
+            		attackSuccess = true;
+            	}
             }
             else
             {
@@ -129,10 +153,15 @@ public class Attack
         { // if king
             if (vChar == 'p') // attacking pawn
                 attackSuccess = true;
-            else if (vChar == 'k' || vChar == 'q' || vChar == 'n' || vChar == 'b')
+            else if (vChar == 'k' || vChar == 'q' || vChar == 'n')
             { // attacking king/queen/knight/bishop
                 if (dieNum >= 4)
                     attackSuccess = true;
+            }
+            else if (vChar == 'b') {
+            	if(dieNum >= 4) {
+            		attackSuccess = true;
+            	}
             }
             else
             {
@@ -151,7 +180,7 @@ public class Attack
     public int getDieNum() {
         return dieNum;
     }
-
+    
     public void killPiece(Piece victim)
     {
         victim = null;

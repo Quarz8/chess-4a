@@ -143,10 +143,16 @@ public abstract class Piece
     // reassigns piece's corp to kingCorp
     public void reassignAll(Corp kingCorp)
     {
-        for (int i = 0; i < this.corp.units.size(); i++) // for every piece in this piece's corp...
+        //kingCorp.units.addAll(this.corp.units);
+        
+    	for (int i = 0; i < this.corp.units.size(); i++) // for every piece in this piece's corp...
         {
-            this.corp.units.get(i).setCorp(kingCorp); // set piece's corp to kingCorp
+            //this.corp.units.get(i).setCorp(kingCorp); // set piece's corp to kingCorp
+        	System.out.println(kingCorp.units.get(i));
+        	System.out.println(this.corp.units.get(i));
             kingCorp.addUnit(this.corp.units.get(i)); // and add to kingCorp
         }
+        
+        
     }
 }
