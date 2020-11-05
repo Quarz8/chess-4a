@@ -55,11 +55,6 @@ public class Attack
                 if (dieNum >= 5)
                     attackSuccess = true;
             }
-            else if(vChar == 'b') {
-            	if(dieNum >= 5) {
-            		attackSuccess = true;
-            	}
-            }
             else
             {
                 if (dieNum == 6)
@@ -95,24 +90,11 @@ public class Attack
                 if (dieNum >= 2)
                     attackSuccess = true;
             }
-           /* else if (vChar == 'n' || vChar == 'b')
+            else if (vChar == 'n' || vChar == 'b')
             { // attacking knight/bishop
                 if (dieNum >= 4)
                     attackSuccess = true;
-            }
-            */
-            else if (vChar == 'n')
-            { // attacking knight/bishop
-                if (dieNum >= 4)
-                    attackSuccess = true;
-            }
-            else if (vChar == 'b')
-            { // attacking knight/bishop
-                if (dieNum >= 4) {
-                    attackSuccess = true;
-                }
-                	
-            }
+            }       
             else if (vChar == 'r')
             { // attacking rook
                 if (dieNum >= 5)
@@ -133,15 +115,10 @@ public class Attack
                 if (dieNum >= 2)
                     attackSuccess = true;
             }
-            else if (vChar == 'k' || vChar == 'q' || vChar == 'n')
+            else if (vChar == 'k' || vChar == 'q' || vChar == 'n' || vChar == 'b')
             { // attacking king/queen/knight/bishop
                 if (dieNum >= 4)
                     attackSuccess = true;
-            }
-            else if(vChar == 'b') {
-            	if(dieNum >= 4) {
-            		attackSuccess = true;
-            	}
             }
             else
             {
@@ -155,15 +132,10 @@ public class Attack
         { // if king
             if (vChar == 'p') // attacking pawn
                 attackSuccess = true;
-            else if (vChar == 'k' || vChar == 'q' || vChar == 'n')
+            else if (vChar == 'k' || vChar == 'q' || vChar == 'n' || vChar == 'b')
             { // attacking king/queen/knight/bishop
                 if (dieNum >= 4)
                     attackSuccess = true;
-            }
-            else if (vChar == 'b') {
-            	if(dieNum >= 4) {
-            		attackSuccess = true;
-            	}
             }
             else
             {
