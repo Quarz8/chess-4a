@@ -309,7 +309,7 @@ class GamePanel extends JPanel
             {
                 // save selected tile
                 selectedTile = newTile;
-                System.out.println(newTile.pieceAt.getCorp());
+                //System.out.println(newTile.pieceAt.getCorp());
                 highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
                         true);
                 highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
@@ -368,15 +368,25 @@ class GamePanel extends JPanel
                     	
                     	if(selectedTile2.pieceAt.charRep == 'b') {
                         	
-                        	System.out.println("HERE");
-                    		selectedTile2.pieceAt.reassignAll(gBoard.corpKB);
-                    		
+                        	Corp tempCorp1 = selectedTile2.pieceAt.corp;
+
+                    		for (int i = 0; i < tempCorp1.units.size(); i++) // for every piece in this piece's corp...
+                            {
+
+                    			tempCorp1.units.get(i).corp = gBoard.corpKB;
+                            }
+                            
                     		gBoard.maxActionsBlack--;
                     	}
                     	else if(selectedTile2.pieceAt.charRep == 'B') {
                         
-                    		System.out.println("HERE");
-                    		selectedTile2.pieceAt.reassignAll(gBoard.corpKW);
+                        	Corp tempCorp2 = selectedTile2.pieceAt.corp;
+
+                    		for (int i = 0; i < tempCorp2.units.size(); i++) // for every piece in this piece's corp...
+                            {
+                    			tempCorp2.units.get(i).corp = gBoard.corpKW; // set piece's corp to kingCorp
+                            }
+                            
                     		gBoard.maxActionsWhite--;
                     	}
                         //piece.killPiece(selectedTile2.pieceAt);
@@ -401,41 +411,20 @@ class GamePanel extends JPanel
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
                                                                                 // made
                         gBoard.actionsTaken = 0; // reset actionsTaken
-                        // reset all corp's hasActed to false
                         
-                        //if(gBoard.corpBB1.units.get(0) != null)
-                        	gBoard.corpBB1.setHasActed(false);
+                        gBoard.corpBB1.setHasActed(false);
                         
-                        //if(gBoard.corpBB2.units.get(0) != null)
-                        	gBoard.corpBB2.setHasActed(false);
+                        gBoard.corpBB2.setHasActed(false);
                         
                         gBoard.corpKB.setHasActed(false);
                         
-                        //if(gBoard.corpBW1.units.get(0) != null)
-                        	gBoard.corpBW1.setHasActed(false);
+                        gBoard.corpBW1.setHasActed(false);
                         
-                        //if(gBoard.corpBW1.units.get(0) != null)
-                        	gBoard.corpBW2.setHasActed(false);
+                        gBoard.corpBW2.setHasActed(false);
                         
                         gBoard.corpKW.setHasActed(false);
                        
-                        	//gBoard.maxActionsBlack
-                        	//if(gBoard.whiteMoving)
-                        	//Bishop.reassignAll(gBoard.corpKW);
-                        }
-                    
-                   /* if(Attack.enemyBishop() == false) {
-                    	if(gBoard.whiteMoving) {
-                    		gBoard.maxActionsWhite = 2;
-                    		Piece.reassignAll(corpKW);
-                    		
-                    	}
-                    	else
-                    		gBoard.maxActionsBlack = 2;
-                    	
-                    	*/
-                        // TODO if selectedtile.pieceAt = enemyBishop, enemyMaxActions-- and
-                        // bishop.reassignAll(kingCorp)
+                        }                   
                     
                     break;
                 }
@@ -583,6 +572,12 @@ class TilePanel extends JPanel implements MouseListener
 
     @Override
     public void mouseEntered(MouseEvent e)
+    {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e)
     {
 
     }
