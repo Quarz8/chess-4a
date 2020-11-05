@@ -1,3 +1,5 @@
+import javax.swing.ImageIcon;
+
 public class Attack
 {
 
@@ -184,5 +186,34 @@ public class Attack
     public void killPiece(Piece victim)
     {
         victim = null;
+    }
+    
+    //CHANGES DIE DISPLAY IN GAMEFRAME
+    public void setDieDisplay()
+    {
+    	if (dieNum == 1)
+    	{
+    		GameFrame.dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die1.png")));
+    	}
+    	else if (dieNum == 2)
+    	{
+    		GameFrame.dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die2.png")));
+    	}
+    	else if (dieNum == 3)
+    	{
+    		GameFrame.dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die3.png")));
+    	}
+    	else if (dieNum == 4)
+    	{
+    		GameFrame.dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die4.png")));
+    	}
+    	else if (dieNum == 5)
+    	{
+    		GameFrame.dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die5.png")));
+    	}
+    	else if (dieNum == 6)
+    	{
+    		GameFrame.dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die6.png")));
+    	}
     }
 }
