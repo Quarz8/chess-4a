@@ -581,10 +581,4 @@ class TilePanel extends JPanel implements MouseListener
     {
 
     }
-
-    @Override
-    public void mouseExited(MouseEvent e)
-    {
-
-    }
 }
