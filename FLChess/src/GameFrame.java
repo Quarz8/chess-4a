@@ -331,7 +331,12 @@ class GamePanel extends JPanel
             {
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted move tile
                 {
-                    selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                	System.out.println(selectedTile.pieceAt.getCorp() + "     lol     " + gBoard.corpKB+ "  " + gBoard.corpKW
+                			);
+                	if(selectedTile.pieceAt.getCorp() != gBoard.corpKB && selectedTile.pieceAt.getCorp() != gBoard.corpKW) {
+                	
+                		selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                	}
                     gBoard.actionsTaken++; // increment actionsTaken for this turn
                     gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
                     if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack)) // if max action limit is reach...
@@ -358,7 +363,11 @@ class GamePanel extends JPanel
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
                 {
                     selectedTile2 = newTile; // save selected tile
-                    selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                	System.out.println(selectedTile2.pieceAt.getCorp() + "     lol     " + gBoard.corpKB + "  " + gBoard.corpKW);
+
+                    if(selectedTile2.pieceAt.getCorp() != gBoard.corpKB && selectedTile2.pieceAt.getCorp() != gBoard.corpKW) {
+                    	selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                    }
                     gBoard.actionsTaken++; // increment actionsTaken for this turnAttack piece = new Attack();
 
                     Attack piece = new Attack();
@@ -412,18 +421,13 @@ class GamePanel extends JPanel
                                                                                 // made
                         gBoard.actionsTaken = 0; // reset actionsTaken
                         
-                        gBoard.corpBB1.setHasActed(false);
-                        
-                        gBoard.corpBB2.setHasActed(false);
-                        
-                        gBoard.corpKB.setHasActed(false);
-                        
-                        gBoard.corpBW1.setHasActed(false);
-                        
-                        gBoard.corpBW2.setHasActed(false);
-                        
+                        gBoard.corpBB1.setHasActed(false);                       
+                        gBoard.corpBB2.setHasActed(false);                        
+                        gBoard.corpKB.setHasActed(false);                       
+                        gBoard.corpBW1.setHasActed(false);                       
+                        gBoard.corpBW2.setHasActed(false);                        
                         gBoard.corpKW.setHasActed(false);
-                       
+                        
                         }                   
                     
                     break;
