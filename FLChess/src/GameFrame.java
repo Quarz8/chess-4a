@@ -331,8 +331,6 @@ class GamePanel extends JPanel
             {
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted move tile
                 {
-                	System.out.println(selectedTile.pieceAt.getCorp() + "     lol     " + gBoard.corpKB+ "  " + gBoard.corpKW
-                			);
                 	if(selectedTile.pieceAt.getCorp() != gBoard.corpKB && selectedTile.pieceAt.getCorp() != gBoard.corpKW) {
                 	
                 		selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
@@ -363,7 +361,6 @@ class GamePanel extends JPanel
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
                 {
                     selectedTile2 = newTile; // save selected tile
-                	System.out.println(selectedTile2.pieceAt.getCorp() + "     lol     " + gBoard.corpKB + "  " + gBoard.corpKW);
 
                     if(selectedTile2.pieceAt.getCorp() != gBoard.corpKB && selectedTile2.pieceAt.getCorp() != gBoard.corpKW) {
                     	selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
