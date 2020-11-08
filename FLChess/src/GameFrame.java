@@ -362,7 +362,7 @@ class GamePanel extends JPanel
                 {
                     selectedTile2 = newTile; // save selected tile
 
-                    if(selectedTile2.pieceAt.getCorp() != gBoard.corpKB && selectedTile2.pieceAt.getCorp() != gBoard.corpKW) {
+                    if(selectedTile.pieceAt.getCorp() != gBoard.corpKB && selectedTile.pieceAt.getCorp() != gBoard.corpKW) {
                     	selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
                     }
                     gBoard.actionsTaken++; // increment actionsTaken for this turnAttack piece = new Attack();
