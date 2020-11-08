@@ -46,8 +46,8 @@ public class GameFrame extends JFrame implements ActionListener
     GamePanel game;
     JButton goGame, howTo;
     JButton skipButton;
-    static JLabel dieDisplay;
-    ImageIcon instruct, instruct2, dieIcon;
+    static JLabel dieDisplay, turnDisplay;
+    ImageIcon instruct, instruct2;
 
     // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
@@ -78,13 +78,20 @@ public class GameFrame extends JFrame implements ActionListener
         howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
         howTo.addActionListener(this);
 
-        // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START) INCLUDES DIE ROLL DISPLAY
+        // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START) INCLUDES DIE ROLL DISPLAY AND TURN DISPLAY
         controlPanel = new JPanel(flowLayout);
-    	controlPanel.add(skipButton);
     	
 		dieDisplay = new JLabel();
 		dieDisplay.setPreferredSize(new Dimension(100,100));
 		dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die1.png")));
+
+		turnDisplay = new JLabel();
+		turnDisplay.setPreferredSize(new Dimension(190,100));
+    	turnDisplay.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		turnDisplay.setText("YOUR TURN");
+		
+		controlPanel.add(turnDisplay);
+    	controlPanel.add(skipButton);
 		controlPanel.add(dieDisplay);
 
         // PUSH COMPONENTS TO GAMEFRAME (JFRAME)
@@ -152,6 +159,16 @@ public class GameFrame extends JFrame implements ActionListener
         	game.gBoard.corpBW1.setHasActed(false);
         	game.gBoard.corpBW2.setHasActed(false);
         	game.gBoard.corpKW.setHasActed(false);
+        	
+        	 // DISPLAY WHO'S TURN IT IS AFTER SKIP
+            if (game.gBoard.whiteMoving == false)
+            {
+            	GameFrame.turnDisplay.setText("AI's TURN");
+            }
+            else
+            {
+            	GameFrame.turnDisplay.setText("YOUR TURN");
+            }
         }
     }
 
@@ -274,6 +291,18 @@ class GamePanel extends JPanel
             int[] highlightPos = iterator.next();
             pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(ATTACK_COLOR);
         }
+        
+
+        // DISPLAY WHO'S TURN IT IS EACH TURN
+        if (gBoard.whiteMoving == false)
+        {
+        	GameFrame.turnDisplay.setText("AI's TURN");
+        }
+        else
+        {
+        	GameFrame.turnDisplay.setText("YOUR TURN");
+        }
+        
     }
 
     public void handleSelection(TilePanel newTile)
