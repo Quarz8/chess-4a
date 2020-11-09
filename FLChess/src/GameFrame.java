@@ -161,14 +161,7 @@ public class GameFrame extends JFrame implements ActionListener
         	game.gBoard.corpKW.setHasActed(false);
         	
         	 // DISPLAY WHO'S TURN IT IS AFTER SKIP
-            if (game.gBoard.whiteMoving == false)
-            {
-            	GameFrame.turnDisplay.setText("AI's TURN");
-            }
-            else
-            {
-            	GameFrame.turnDisplay.setText("YOUR TURN");
-            }
+            game.changeTurnDisplay();
         }
     }
 
@@ -180,6 +173,8 @@ public class GameFrame extends JFrame implements ActionListener
         game.updateBoard(new GameBoard());
         game.gBoard.toSysOut();
     }
+    
+    
 
     // FINAL SET UP (MAIN METHOD)
     public static void main(String[] args)
@@ -293,15 +288,8 @@ class GamePanel extends JPanel
         }
         
 
-        // DISPLAY WHO'S TURN IT IS EACH TURN
-        if (gBoard.whiteMoving == false)
-        {
-        	GameFrame.turnDisplay.setText("AI's TURN");
-        }
-        else
-        {
-        	GameFrame.turnDisplay.setText("YOUR TURN");
-        }
+        // DISPLAY WHO'S TURN IT IS
+       this.changeTurnDisplay();
         
     }
 
@@ -435,6 +423,19 @@ class GamePanel extends JPanel
         }
 
         this.updateBoard(gBoard);
+    }
+    
+    //UPDATES GAMEFRAME TURN DISPLAY LABEL 
+    public void changeTurnDisplay()
+    {
+    	if (gBoard.whiteMoving == false)
+        {
+        	GameFrame.turnDisplay.setText("AI's TURN");
+        }
+        else
+        {
+        	GameFrame.turnDisplay.setText("YOUR TURN");
+        }
     }
 
     @Override
