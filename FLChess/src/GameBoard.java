@@ -1,8 +1,11 @@
+import javax.swing.*;
+
 public class GameBoard
 {
     Piece tiles[][] = new Piece[8][8];
     int actionsTaken = 0; // actions taken on turn so far
     boolean whiteMoving;
+
     
     int maxActionsWhite = 3; // maximum number of actions white can perform
     int maxActionsBlack = 3; // maximum number of actions black can perform
@@ -61,18 +64,15 @@ public class GameBoard
         }
     };
     
-    public GameBoard()
-    {
+    public GameBoard() {
         this.whiteMoving = true;
-        for (int row = 0; row < tiles.length; row++)
-        {
-        	for (int column = 0; column < tiles[row].length; column++)
-        	{
-        		tiles[row][column] = INITIAL_SETUP[row][column];
-        	}
+        for (int row = 0; row < tiles.length; row++) {
+            for (int column = 0; column < tiles[row].length; column++) {
+                tiles[row][column] = INITIAL_SETUP[row][column];
+            }
         }
     }
-    
+
     public void movePiece(int[] before, int[] after)
             //Takes in a size-two array in the form of {row, column}
     {
@@ -96,7 +96,7 @@ public class GameBoard
         }
         
     }
-    
+
     public void toSysOut()
     {
         String output = "It's currently " + (whiteMoving ? "white's" : "black's")

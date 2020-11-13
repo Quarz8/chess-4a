@@ -47,6 +47,8 @@ public class GameFrame extends JFrame implements ActionListener
     JButton goGame, howTo;
     JButton skipButton;
     static JLabel dieDisplay;
+    JLabel turnDisplay;
+    //static JLabel actionsDisplay;
     ImageIcon instruct, instruct2, dieIcon;
 
     // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,11 +83,24 @@ public class GameFrame extends JFrame implements ActionListener
         // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START) INCLUDES DIE ROLL DISPLAY
         controlPanel = new JPanel(flowLayout);
     	controlPanel.add(skipButton);
-    	
+
+    	//actionsDisplay = new JLabel(game.gBoard.actionsTaken);
+        //turnDisplay = new JLabel("White");
+        //if(game.gBoard.whiteMoving= game.gBoard.whiteMoving ? true:false) {
+            //turnDisplay = new JLabel("White");
+
 		dieDisplay = new JLabel();
+		//turnDisplay.setPreferredSize(new Dimension(100,100));
+		//turnDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight piece.png")));
 		dieDisplay.setPreferredSize(new Dimension(100,100));
 		dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die1.png")));
 		controlPanel.add(dieDisplay);
+		//controlPanel.add(turnDisplay);
+
+
+
+
+
 
         // PUSH COMPONENTS TO GAMEFRAME (JFRAME)
         add(mainPanel);
@@ -337,7 +352,7 @@ class GamePanel extends JPanel
                     {
                         System.out.println("END OF TURN");
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
-                                                                                // made
+                        // made
                         gBoard.actionsTaken = 0; // reset actionsTaken
                         // reset all corp's hasActed to false
                         gBoard.corpBB1.setHasActed(false);
@@ -407,7 +422,6 @@ class GamePanel extends JPanel
 
         this.updateBoard(gBoard);
     }
-
     @Override
     public Dimension getPreferredSize()
     {
