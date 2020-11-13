@@ -1,4 +1,4 @@
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 public class Attack
 {
@@ -160,6 +160,7 @@ public class Attack
     }
     
     //CHANGES DIE DISPLAY IN GAMEFRAME
+
     public void setDieDisplay()
     {
     	if (dieNum == 1)
@@ -187,4 +188,7 @@ public class Attack
     		GameFrame.dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die6.png")));
     	}
     }
+
+
 }
+
