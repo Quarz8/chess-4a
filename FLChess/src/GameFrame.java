@@ -309,6 +309,7 @@ class GamePanel extends JPanel
             {
                 // save selected tile
                 selectedTile = newTile;
+                //System.out.println(newTile.pieceAt.getCorp());
                 highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
                         true);
                 highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
@@ -330,10 +331,13 @@ class GamePanel extends JPanel
             {
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted move tile
                 {
-                    selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                	if(selectedTile.pieceAt.getCorp() != gBoard.corpKB && selectedTile.pieceAt.getCorp() != gBoard.corpKW) {
+                	
+                		selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                	}
                     gBoard.actionsTaken++; // increment actionsTaken for this turn
                     gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
-                    if (gBoard.actionsTaken >= gBoard.maxActionsWhite) // if max action limit is reach...
+                    if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack)) // if max action limit is reach...
                     {
                         System.out.println("END OF TURN");
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
@@ -357,19 +361,48 @@ class GamePanel extends JPanel
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
                 {
                     selectedTile2 = newTile; // save selected tile
-                    selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+
+                    if(selectedTile.pieceAt.getCorp() != gBoard.corpKB && selectedTile.pieceAt.getCorp() != gBoard.corpKW) {
+                    	selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                    }
                     gBoard.actionsTaken++; // increment actionsTaken for this turnAttack piece = new Attack();
 
                     Attack piece = new Attack();
 
                     if (piece.tryAttack(selectedTile.pieceAt, selectedTile2.pieceAt, selectedTile.pieceAt.hasMoved)) // if attack succeeds...
                     {
-                        piece.killPiece(selectedTile2.pieceAt);
+                    	
+                    	if(selectedTile2.pieceAt.charRep == 'b') {
+                        	
+                        	Corp tempCorp1 = selectedTile2.pieceAt.corp;
+
+                    		for (int i = 0; i < tempCorp1.units.size(); i++) // for every piece in this piece's corp...
+                            {
+
+                    			tempCorp1.units.get(i).corp = gBoard.corpKB;
+                            }
+                            
+                    		gBoard.maxActionsBlack--;
+                    	}
+                    	else if(selectedTile2.pieceAt.charRep == 'B') {
+                        
+                        	Corp tempCorp2 = selectedTile2.pieceAt.corp;
+
+                    		for (int i = 0; i < tempCorp2.units.size(); i++) // for every piece in this piece's corp...
+                            {
+                    			tempCorp2.units.get(i).corp = gBoard.corpKW; // set piece's corp to kingCorp
+                            }
+                            
+                    		gBoard.maxActionsWhite--;
+                    	}
+                        //piece.killPiece(selectedTile2.pieceAt);
                         gBoard.movePiece(prevLoc, newLoc);
                         
                         piece.setDieDisplay();
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
                         // TODO display roll in GUI, piece.getDieNum();
+                        
+                        
                     }
                     else // if attack failed
                     {
@@ -377,23 +410,23 @@ class GamePanel extends JPanel
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
                         // TODO display roll in GUI, piece.getDieNum();
                     }
-
-                    if (gBoard.actionsTaken >= gBoard.maxActionsWhite)
+                    
+                    if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack))
                     {
                         System.out.println("END OF TURN");
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
                                                                                 // made
                         gBoard.actionsTaken = 0; // reset actionsTaken
-                        // reset all corp's hasActed to false
-                        gBoard.corpBB1.setHasActed(false);
-                        gBoard.corpBB2.setHasActed(false);
-                        gBoard.corpKB.setHasActed(false);
-                        gBoard.corpBW1.setHasActed(false);
-                        gBoard.corpBW2.setHasActed(false);
+                        
+                        gBoard.corpBB1.setHasActed(false);                       
+                        gBoard.corpBB2.setHasActed(false);                        
+                        gBoard.corpKB.setHasActed(false);                       
+                        gBoard.corpBW1.setHasActed(false);                       
+                        gBoard.corpBW2.setHasActed(false);                        
                         gBoard.corpKW.setHasActed(false);
-                        // TODO if selectedtile.pieceAt = enemyBishop, enemyMaxActions-- and
-                        // bishop.reassignAll(kingCorp)
-                    }
+                        
+                        }                   
+                    
                     break;
                 }
             }

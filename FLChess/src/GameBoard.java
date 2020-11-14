@@ -15,6 +15,7 @@ public class GameBoard
     Corp corpBB2 = new Corp(); // black bishop corp 2
     Corp corpKB = new Corp(); // black king corp
     
+    
     final Piece INITIAL_SETUP[][] =
     		//i wrote this out by hand. trust me i tried figuring out how to
     		//automate this. help

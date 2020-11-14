@@ -31,8 +31,9 @@ public class Attack
             }
             else if (vChar == 'b')
             { // attacking bishop
-                if (dieNum >= 5)
+                if (dieNum >= 5) {
                     attackSuccess = true;
+                }
             }
             else
             {
@@ -93,7 +94,7 @@ public class Attack
             { // attacking knight/bishop
                 if (dieNum >= 4)
                     attackSuccess = true;
-            }
+            }       
             else if (vChar == 'r')
             { // attacking rook
                 if (dieNum >= 5)
@@ -153,7 +154,7 @@ public class Attack
     public int getDieNum() {
         return dieNum;
     }
-
+    
     public void killPiece(Piece victim)
     {
         victim = null;
