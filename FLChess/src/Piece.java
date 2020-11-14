@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -30,7 +31,7 @@ public abstract class Piece
             { -1, 1 } // SW
     };
 
-    private Corp corp;
+    public Corp corp;
 
     public Piece(boolean white, int row, int column, Corp newCorp)
     {
@@ -140,13 +141,4 @@ public abstract class Piece
         newCorp.addUnit(this);
     }
 
-    // reassigns piece's corp to kingCorp
-    public void reassignAll(Corp kingCorp)
-    {
-        for (int i = 0; i < this.corp.units.size(); i++) // for every piece in this piece's corp...
-        {
-            this.corp.units.get(i).setCorp(kingCorp); // set piece's corp to kingCorp
-            kingCorp.addUnit(this.corp.units.get(i)); // and add to kingCorp
-        }
-    }
 }

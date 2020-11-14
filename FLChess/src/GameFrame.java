@@ -46,10 +46,8 @@ public class GameFrame extends JFrame implements ActionListener
     GamePanel game;
     JButton goGame, howTo;
     JButton skipButton;
-    static JLabel dieDisplay;
-    JLabel turnDisplay;
-    //static JLabel actionsDisplay;
-    ImageIcon instruct, instruct2, dieIcon;
+    static JLabel dieDisplay, turnDisplay;
+    ImageIcon instruct, instruct2;
 
     // GAME FRAME FOR OVERALL SET UP (UNIVERSAL BUTTONS)//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public GameFrame()
@@ -80,27 +78,24 @@ public class GameFrame extends JFrame implements ActionListener
         howTo.setIcon(new ImageIcon(GameFrame.class.getResource("Images/How To Play.png")));
         howTo.addActionListener(this);
 
-        // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START) INCLUDES DIE ROLL DISPLAY
+        // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START) INCLUDES DIE ROLL DISPLAY AND TURN DISPLAY
         controlPanel = new JPanel(flowLayout);
-    	controlPanel.add(skipButton);
 
-    	//actionsDisplay = new JLabel(game.gBoard.actionsTaken);
-        //turnDisplay = new JLabel("White");
-        //if(game.gBoard.whiteMoving= game.gBoard.whiteMoving ? true:false) {
-            //turnDisplay = new JLabel("White");
-
+    	
 		dieDisplay = new JLabel();
 		//turnDisplay.setPreferredSize(new Dimension(100,100));
 		//turnDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight piece.png")));
 		dieDisplay.setPreferredSize(new Dimension(100,100));
 		dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die1.png")));
+
+		turnDisplay = new JLabel();
+		turnDisplay.setPreferredSize(new Dimension(190,100));
+    turnDisplay.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		turnDisplay.setText("YOUR TURN");
+		
+		controlPanel.add(turnDisplay);
+    controlPanel.add(skipButton);
 		controlPanel.add(dieDisplay);
-		//controlPanel.add(turnDisplay);
-
-
-
-
-
 
         // PUSH COMPONENTS TO GAMEFRAME (JFRAME)
         add(mainPanel);
@@ -167,6 +162,9 @@ public class GameFrame extends JFrame implements ActionListener
         	game.gBoard.corpBW1.setHasActed(false);
         	game.gBoard.corpBW2.setHasActed(false);
         	game.gBoard.corpKW.setHasActed(false);
+        	
+        	 // DISPLAY WHO'S TURN IT IS AFTER SKIP
+            game.changeTurnDisplay();
         }
     }
 
@@ -178,6 +176,8 @@ public class GameFrame extends JFrame implements ActionListener
         game.updateBoard(new GameBoard());
         game.gBoard.toSysOut();
     }
+    
+    
 
     // FINAL SET UP (MAIN METHOD)
     public static void main(String[] args)
@@ -289,6 +289,11 @@ class GamePanel extends JPanel
             int[] highlightPos = iterator.next();
             pnlChessCells[highlightPos[0]][highlightPos[1]].setBackground(ATTACK_COLOR);
         }
+        
+
+        // DISPLAY WHO'S TURN IT IS
+       this.changeTurnDisplay();
+        
     }
 
     public void handleSelection(TilePanel newTile)
@@ -324,6 +329,7 @@ class GamePanel extends JPanel
             {
                 // save selected tile
                 selectedTile = newTile;
+                //System.out.println(newTile.pieceAt.getCorp());
                 highlightedMoveTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
                         true);
                 highlightedAttackTiles = newTile.pieceAt.searchValidActions(gBoard.tiles, newTile.pieceAt.directions,
@@ -345,10 +351,13 @@ class GamePanel extends JPanel
             {
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted move tile
                 {
-                    selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                	if(selectedTile.pieceAt.getCorp() != gBoard.corpKB && selectedTile.pieceAt.getCorp() != gBoard.corpKW) {
+                	
+                		selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                	}
                     gBoard.actionsTaken++; // increment actionsTaken for this turn
                     gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
-                    if (gBoard.actionsTaken >= gBoard.maxActionsWhite) // if max action limit is reach...
+                    if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack)) // if max action limit is reach...
                     {
                         System.out.println("END OF TURN");
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
@@ -372,19 +381,48 @@ class GamePanel extends JPanel
                 if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
                 {
                     selectedTile2 = newTile; // save selected tile
-                    selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+
+                    if(selectedTile.pieceAt.getCorp() != gBoard.corpKB && selectedTile.pieceAt.getCorp() != gBoard.corpKW) {
+                    	selectedTile.pieceAt.getCorp().setHasActed(true); // mark that that corp has now acted
+                    }
                     gBoard.actionsTaken++; // increment actionsTaken for this turnAttack piece = new Attack();
 
                     Attack piece = new Attack();
 
                     if (piece.tryAttack(selectedTile.pieceAt, selectedTile2.pieceAt, selectedTile.pieceAt.hasMoved)) // if attack succeeds...
                     {
-                        piece.killPiece(selectedTile2.pieceAt);
+                    	
+                    	if(selectedTile2.pieceAt.charRep == 'b') {
+                        	
+                        	Corp tempCorp1 = selectedTile2.pieceAt.corp;
+
+                    		for (int i = 0; i < tempCorp1.units.size(); i++) // for every piece in this piece's corp...
+                            {
+
+                    			tempCorp1.units.get(i).corp = gBoard.corpKB;
+                            }
+                            
+                    		gBoard.maxActionsBlack--;
+                    	}
+                    	else if(selectedTile2.pieceAt.charRep == 'B') {
+                        
+                        	Corp tempCorp2 = selectedTile2.pieceAt.corp;
+
+                    		for (int i = 0; i < tempCorp2.units.size(); i++) // for every piece in this piece's corp...
+                            {
+                    			tempCorp2.units.get(i).corp = gBoard.corpKW; // set piece's corp to kingCorp
+                            }
+                            
+                    		gBoard.maxActionsWhite--;
+                    	}
+                        //piece.killPiece(selectedTile2.pieceAt);
                         gBoard.movePiece(prevLoc, newLoc);
                         
                         piece.setDieDisplay();
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
                         // TODO display roll in GUI, piece.getDieNum();
+                        
+                        
                     }
                     else // if attack failed
                     {
@@ -392,23 +430,23 @@ class GamePanel extends JPanel
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
                         // TODO display roll in GUI, piece.getDieNum();
                     }
-
-                    if (gBoard.actionsTaken >= gBoard.maxActionsWhite)
+                    
+                    if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack))
                     {
                         System.out.println("END OF TURN");
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
                                                                                 // made
                         gBoard.actionsTaken = 0; // reset actionsTaken
-                        // reset all corp's hasActed to false
-                        gBoard.corpBB1.setHasActed(false);
-                        gBoard.corpBB2.setHasActed(false);
-                        gBoard.corpKB.setHasActed(false);
-                        gBoard.corpBW1.setHasActed(false);
-                        gBoard.corpBW2.setHasActed(false);
+                        
+                        gBoard.corpBB1.setHasActed(false);                       
+                        gBoard.corpBB2.setHasActed(false);                        
+                        gBoard.corpKB.setHasActed(false);                       
+                        gBoard.corpBW1.setHasActed(false);                       
+                        gBoard.corpBW2.setHasActed(false);                        
                         gBoard.corpKW.setHasActed(false);
-                        // TODO if selectedtile.pieceAt = enemyBishop, enemyMaxActions-- and
-                        // bishop.reassignAll(kingCorp)
-                    }
+                        
+                        }                   
+                    
                     break;
                 }
             }
@@ -422,6 +460,20 @@ class GamePanel extends JPanel
 
         this.updateBoard(gBoard);
     }
+    
+    //UPDATES GAMEFRAME TURN DISPLAY LABEL 
+    public void changeTurnDisplay()
+    {
+    	if (gBoard.whiteMoving == false)
+        {
+        	GameFrame.turnDisplay.setText("AI's TURN");
+        }
+        else
+        {
+        	GameFrame.turnDisplay.setText("YOUR TURN");
+        }
+    }
+
     @Override
     public Dimension getPreferredSize()
     {
