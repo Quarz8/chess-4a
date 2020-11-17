@@ -73,18 +73,21 @@ public class GameFrame extends JFrame implements ActionListener
 
         // CONTROL PANEL (IS SHOWN WHEN GAME IS PLAYED, HIDDEN TO START) INCLUDES DIE ROLL DISPLAY AND TURN DISPLAY
         controlPanel = new JPanel(flowLayout);
+
     	
 		dieDisplay = new JLabel();
+		//turnDisplay.setPreferredSize(new Dimension(100,100));
+		//turnDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/knight piece.png")));
 		dieDisplay.setPreferredSize(new Dimension(100,100));
 		dieDisplay.setIcon(new ImageIcon(GameFrame.class.getResource("Images/die1.png")));
 
 		turnDisplay = new JLabel();
 		turnDisplay.setPreferredSize(new Dimension(190,100));
-    	turnDisplay.setFont(new Font("Tahoma", Font.PLAIN, 20));
+    turnDisplay.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		turnDisplay.setText("YOUR TURN");
 		
 		controlPanel.add(turnDisplay);
-    	controlPanel.add(skipButton);
+    controlPanel.add(skipButton);
 		controlPanel.add(dieDisplay);
 
         // PUSH COMPONENTS TO GAMEFRAME (JFRAME)
@@ -363,6 +366,7 @@ class GamePanel extends JPanel
                     if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack)) // if max action limit is reached...
                     {
                         System.out.println("END OF TURN");
+
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches turns after move is made
                         
                         gBoard.actionsTaken = 0; // reset actionsTaken
