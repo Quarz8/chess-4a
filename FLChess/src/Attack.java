@@ -148,6 +148,8 @@ public class Attack
         {
             System.out.println("Didn't roll high enough!");
         }
+        else
+            System.out.println("Attack successful!");
         return attackSuccess;
     }
     

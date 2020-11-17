@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -32,6 +34,7 @@ import javax.swing.JTextArea;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import java.lang.*;
 
@@ -45,7 +48,7 @@ public class GameFrame extends JFrame implements ActionListener
     MenuPanel menu;
     GamePanel game;
     JButton goGame, howTo;
-    JButton skipButton;
+    static JButton skipButton;
     static JLabel dieDisplay, turnDisplay;
     ImageIcon instruct, instruct2;
 
@@ -160,6 +163,18 @@ public class GameFrame extends JFrame implements ActionListener
         	game.gBoard.corpBW2.setHasActed(false);
         	game.gBoard.corpKW.setHasActed(false);
         	
+        	// reset selections, highlights
+            game.selectedTile = game.NULL_TILE;
+            game.selectedTile2 = game.NULL_TILE;
+            game.highlightedMoveTiles.clear();
+            game.highlightedAttackTiles.clear();
+            game.updateBoard(game.gBoard);
+            
+            // start (black) AI's turn
+            if(!game.gBoard.whiteMoving)
+            for(int i=0; i<game.gBoard.maxActionsBlack; i++)
+                game.scanBoard(false, game.gBoard.tiles);
+        	
         	 // DISPLAY WHO'S TURN IT IS AFTER SKIP
             game.changeTurnDisplay();
         }
@@ -221,6 +236,8 @@ class GamePanel extends JPanel
     TilePanel[][] pnlChessCells = new TilePanel[gBoard.tiles.length][gBoard.tiles[0].length];
     TilePanel selectedTile;
     TilePanel selectedTile2;
+    Piece selectedPiece;
+    Piece selectedPiece2;
     Collection<int[]> highlightedMoveTiles = new ArrayList<>();
     Collection<int[]> highlightedAttackTiles = new ArrayList<>();
     final Color DARK_COLOR = new Color(136, 0, 27);
@@ -236,6 +253,8 @@ class GamePanel extends JPanel
         NULL_TILE.pieceAt = new NullPiece();
         this.selectedTile = NULL_TILE;
         this.selectedTile2 = NULL_TILE;
+        this.selectedPiece = NULL_TILE.pieceAt;
+        this.selectedPiece2 = NULL_TILE.pieceAt;
 
         // CREATE BOARD IN GAME PANEL CONSTRUCTOR
         for (int row = 0; row < pnlChessCells.length; row++)
@@ -293,6 +312,7 @@ class GamePanel extends JPanel
         
     }
 
+    // HANDLES HUMAN MOUSE CLICK SELECTION
     public void handleSelection(TilePanel newTile)
     {
         // new tile information
@@ -359,6 +379,7 @@ class GamePanel extends JPanel
                         System.out.println("END OF TURN");
                         gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
                                                                                 // made
+                        
                         gBoard.actionsTaken = 0; // reset actionsTaken
                         // reset all corp's hasActed to false
                         gBoard.corpBB1.setHasActed(false);
@@ -367,7 +388,7 @@ class GamePanel extends JPanel
                         gBoard.corpBW1.setHasActed(false);
                         gBoard.corpBW2.setHasActed(false);
                         gBoard.corpKW.setHasActed(false);
-                        // TODO reset actions taken to 0 and switch whose turn it is
+                        
                     }
 
                     break;
@@ -417,15 +438,182 @@ class GamePanel extends JPanel
                         
                         piece.setDieDisplay();
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
-                        // TODO display roll in GUI, piece.getDieNum();
-                        
-                        
                     }
                     else // if attack failed
                     {
                     	piece.setDieDisplay();
                         System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
-                        // TODO display roll in GUI, piece.getDieNum();
+                    }
+                    
+                    if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack))
+                    {
+                        System.out.println("END OF TURN");
+                        gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
+                                                                                // made
+                        gBoard.actionsTaken = 0; // reset actionsTaken
+                        
+                        gBoard.corpBB1.setHasActed(false);                       
+                        gBoard.corpBB2.setHasActed(false);                        
+                        gBoard.corpKB.setHasActed(false);                       
+                        gBoard.corpBW1.setHasActed(false);                       
+                        gBoard.corpBW2.setHasActed(false);                        
+                        gBoard.corpKW.setHasActed(false);
+
+                        }                   
+                    
+                    break;
+                }
+            }
+
+            // reset selections, highlights
+            selectedTile = NULL_TILE;
+            selectedTile2 = NULL_TILE;
+            highlightedMoveTiles.clear();
+            highlightedAttackTiles.clear();
+        }
+
+        this.updateBoard(gBoard);
+        
+        // start (black) AI's turn
+        if(!gBoard.whiteMoving)
+            for(int i=0; i < gBoard.maxActionsBlack; i++) {
+                scanBoard(false, gBoard.tiles);
+            }
+    }
+    
+ // HANDLES AI Piece SELECTION
+    public void handleAiSelection(Piece newPiece)
+    {
+        // new tile information
+        int[] newLoc = {newPiece.row, newPiece.column};
+        
+        gBoard.tiles[newLoc[0]][newLoc[1]].toSysOut();
+
+        if (selectedPiece.charRep == new NullPiece().charRep)
+        // HANDLING FIRST SELECTION
+        {
+            // if empty tile/null piece, do nothing and break out
+            if (gBoard.tiles[newLoc[0]][newLoc[1]].charRep == '-')
+            {
+                System.out.println("not a piece. must select piece first");
+                return;
+            }
+
+            System.out
+                    .println("handleSelection called, no previously selected" + " tile found so this is selectedPiece");
+
+            /*
+             * if the selected tile color does not match the color of the player's turn,
+             * return an error message
+             */
+            if (newPiece.white != gBoard.whiteMoving)
+            {
+                System.out.println("Not your turn");
+                return;
+            }
+
+            if (!newPiece.getCorp().getHasActed())// if piece's corp has not already acted...
+            {
+                // save selected piece
+                selectedPiece = newPiece;
+                //System.out.println(newTile.pieceAt.getCorp());
+                highlightedMoveTiles = newPiece.searchValidActions(gBoard.tiles, newPiece.directions,
+                        true);
+                highlightedAttackTiles = newPiece.searchValidActions(gBoard.tiles, newPiece.directions,
+                        false);
+            }
+            else
+            {
+                System.out.println("This corp has already acted");
+            }
+
+        }
+        else if (selectedPiece2.charRep == new NullPiece().charRep)
+        // HANDLING SECOND SELECTION
+        {
+            // info of previously selected tile
+            int[] prevLoc = {selectedPiece.row, selectedPiece.column};
+
+            for (Iterator<int[]> iterator = highlightedMoveTiles.iterator(); iterator.hasNext();)
+            {
+                if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted move tile
+                {
+                    if(selectedPiece.getCorp() != gBoard.corpKB && selectedPiece.getCorp() != gBoard.corpKW) {
+                    
+                        selectedPiece.getCorp().setHasActed(true); // mark that that corp has now acted
+                    }
+                    gBoard.actionsTaken++; // increment actionsTaken for this turn
+                    gBoard.movePiece(prevLoc, newLoc); // move the piece to its new location
+                    if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack)) // if max action limit is reach...
+                    {
+                        System.out.println("END OF TURN");
+                        gBoard.whiteMoving = gBoard.whiteMoving ? false : true; // switches player turn after move is
+                                                                                // made
+                        gBoard.actionsTaken = 0; // reset actionsTaken
+                        // reset all corp's hasActed to false
+                        gBoard.corpBB1.setHasActed(false);
+                        gBoard.corpBB2.setHasActed(false);
+                        gBoard.corpKB.setHasActed(false);
+                        gBoard.corpBW1.setHasActed(false);
+                        gBoard.corpBW2.setHasActed(false);
+                        gBoard.corpKW.setHasActed(false);
+
+                    }
+
+                    break;
+                }
+            }
+            for (Iterator<int[]> iterator = highlightedAttackTiles.iterator(); iterator.hasNext();)
+            {
+                if (Arrays.equals(newLoc, iterator.next())) // selected a highlighted attack tile
+                {
+                    selectedPiece2 = newPiece; // save selected tile
+
+                    if(selectedPiece.getCorp() != gBoard.corpKB && selectedPiece.getCorp() != gBoard.corpKW) {
+                        selectedPiece.getCorp().setHasActed(true); // mark that that corp has now acted
+                    }
+                    gBoard.actionsTaken++; // increment actionsTaken for this turnAttack piece = new Attack();
+
+                    Attack piece = new Attack();
+
+                    if (piece.tryAttack(selectedPiece, selectedPiece2, selectedPiece.hasMoved)) // if attack succeeds...
+                    {
+                        
+                        if(selectedPiece2.charRep == 'b') {
+                            
+                            Corp tempCorp1 = selectedPiece2.corp;
+
+                            for (int i = 0; i < tempCorp1.units.size(); i++) // for every piece in this piece's corp...
+                            {
+
+                                tempCorp1.units.get(i).corp = gBoard.corpKB;
+                            }
+                            
+                            gBoard.maxActionsBlack--;
+                        }
+                        else if(selectedPiece2.charRep == 'B') {
+                        
+                            Corp tempCorp2 = selectedPiece2.corp;
+
+                            for (int i = 0; i < tempCorp2.units.size(); i++) // for every piece in this piece's corp...
+                            {
+                                tempCorp2.units.get(i).corp = gBoard.corpKW; // set piece's corp to kingCorp
+                            }
+                            
+                            gBoard.maxActionsWhite--;
+                        }
+                        //piece.killPiece(selectedTile2.pieceAt);
+                        gBoard.movePiece(prevLoc, newLoc);
+                        
+                        piece.setDieDisplay();
+                        System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
+                        
+                    }
+                    else // if attack failed
+                    {
+                        piece.setDieDisplay();
+                        System.out.println("You rolled a.... " + piece.getDieNum()); // temp text
+
                     }
                     
                     if (gBoard.actionsTaken >= (gBoard.whiteMoving? gBoard.maxActionsWhite : gBoard.maxActionsBlack))
@@ -449,13 +637,69 @@ class GamePanel extends JPanel
             }
 
             // reset selections, highlights
-            selectedTile = NULL_TILE;
-            selectedTile2 = NULL_TILE;
+            selectedPiece = NULL_TILE.pieceAt;
+            selectedPiece2 = NULL_TILE.pieceAt;
             highlightedMoveTiles.clear();
             highlightedAttackTiles.clear();
         }
 
         this.updateBoard(gBoard);
+    }
+    
+    // Checks every board tile and checks if it is null (-) AND on the AI's team AND
+    // if it's Corp has not yet acted. If piece is a match, checks if it can act
+    void scanBoard(boolean isWhite, Piece[][] board)
+    {
+        ArrayList<Piece> movementCandidates = new ArrayList<>();
+        ArrayList<int[]> attacks = new ArrayList<>();
+        ArrayList<int[]> moves = new ArrayList<>();
+        
+        // while actionsTaken is less than respective maxActions
+        System.out.println("we in there: " + gBoard.actionsTaken);
+        for (int i = 0; i < board.length; i++)
+        {
+            for (int j = 0; j < board[i].length; j++)
+            {
+                if (board[i][j].charRep != '-' && isWhite ? Character.isUpperCase(board[i][j].charRep)
+                        : Character.isLowerCase(board[i][j].charRep) && !board[i][j].getCorp().getHasActed())
+                {                    
+                    // check for valid attacks
+                    attacks = board[i][j].searchValidActions(board, board[i][j].directions, false);
+                    // if attack found...
+                    if(!attacks.isEmpty()) { 
+                        // select that piece and select a random valid attack and return
+                        Random rng = new Random();
+                        int whichAttack = rng.nextInt(attacks.size());
+                        handleAiSelection(board[i][j]);
+                        handleAiSelection(board[attacks.get(whichAttack)[0]][attacks.get(whichAttack)[1]]);
+                        
+                        return;
+                    }
+                    
+                    // if at least 1 move is found...
+                    if(!board[i][j].searchValidActions(board, board[i][j].directions, true).isEmpty()) {
+                        // add to list of movementCandidates
+                        movementCandidates.add(board[i][j]);
+                    }
+                }
+            }
+        }
+        // if somehow no move can be made, skip turn
+        if(movementCandidates.isEmpty())
+            GameFrame.skipButton.doClick();
+        else {
+            // pick a random movementCandidate and a random valid move
+            Random rng = new Random();
+            Piece whichCandidate = movementCandidates.get(rng.nextInt(movementCandidates.size()));
+            moves = whichCandidate.searchValidActions(board, whichCandidate.directions, true);
+            int whichMove = rng.nextInt(moves.size());
+            
+            // select that piece and select a random valid move and return
+            handleAiSelection(whichCandidate);
+            handleAiSelection(board[moves.get(whichMove)[0]][moves.get(whichMove)[1]]);
+            
+            return;
+        }
     }
     
     //UPDATES GAMEFRAME TURN DISPLAY LABEL 
