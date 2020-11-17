@@ -53,7 +53,7 @@ public abstract class Piece
 
     }
 
-    public Collection<int[]> searchValidActions(Piece[][] tiles, int[][] directions, boolean move)
+    public ArrayList<int[]> searchValidActions(Piece[][] tiles, int[][] directions, boolean move)
     /*
      * basically a breadth-first searching algorithm.
      * 
@@ -73,8 +73,8 @@ public abstract class Piece
      */
     {
         int range = (move ? this.movementRange : this.attackRange);
-        Collection<int[]> validActions = new ArrayList<>();
-        Collection<int[]> exploredPositions = new ArrayList<>(); // needed for non-adjacent attacks (thanks, rooks)
+        ArrayList<int[]> validActions = new ArrayList<>();
+        ArrayList<int[]> exploredPositions = new ArrayList<>(); // needed for non-adjacent attacks (thanks, rooks)
         Queue<int[]> unexploredPositions = new LinkedList<>();
 
         int[] seed =

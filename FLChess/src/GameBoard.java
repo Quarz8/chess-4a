@@ -86,7 +86,6 @@ public class GameBoard
             movingPiece.column = after[1];
             tiles[after[0]][after[1]] = movingPiece;
             tiles[before[0]][before[1]] = new NullPiece(before[0], before[1]);
-            System.out.println("Chessboard should now be:");
             this.toSysOut();
         }
         catch(ArrayIndexOutOfBoundsException e)
@@ -104,6 +103,7 @@ public class GameBoard
                 + " turn.\n" + (whiteMoving ? "White" : "Black") + " has used "
                 + actionsTaken + " of " + (whiteMoving ? maxActionsWhite : maxActionsBlack) + " actions this turn.\n";
         
+        System.out.println("Chessboard should now be:");
         for (int row = 0; row < tiles.length; row++)
         {
             for (int column = 0; column < tiles[row].length; column++)
