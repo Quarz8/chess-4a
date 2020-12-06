@@ -429,8 +429,12 @@ class GamePanel extends JPanel
                             
                     		gBoard.maxActionsWhite--;
                     	}
-                        //piece.killPiece(selectedTile2.pieceAt);
-                        gBoard.movePiece(prevLoc, newLoc);
+                    	
+                        if(gBoard.tiles[prevLoc[0]][prevLoc[1]].charRep=='r' || gBoard.tiles[prevLoc[0]][prevLoc[1]].charRep=='R') {
+                            gBoard.tiles[newLoc[0]][newLoc[1]]=new NullPiece(newLoc[0], newLoc[1]);
+                        }
+                        else  
+                            gBoard.movePiece(prevLoc, newLoc);
                         
                         piece.setDieDisplay();
                     }
@@ -590,8 +594,12 @@ class GamePanel extends JPanel
                             
                             gBoard.maxActionsWhite--;
                         }
-                        //piece.killPiece(selectedTile2.pieceAt);
-                        gBoard.movePiece(prevLoc, newLoc);
+                        
+                        if(gBoard.tiles[prevLoc[0]][prevLoc[1]].charRep=='r' || gBoard.tiles[prevLoc[0]][prevLoc[1]].charRep=='R') {
+                            gBoard.tiles[newLoc[0]][newLoc[1]]=new NullPiece(newLoc[0], newLoc[1]);
+                        }
+                        else  
+                            gBoard.movePiece(prevLoc, newLoc);
                         piece.setDieDisplay();
                         
                     }
