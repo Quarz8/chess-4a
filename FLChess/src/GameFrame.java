@@ -233,6 +233,15 @@ class GamePanel extends JPanel
     final Color MOVE_COLOR = new Color(122, 77, 201);
     final Color ATTACK_COLOR = new Color(184, 35, 9);
     final TilePanel NULL_TILE = new TilePanel(this, new BorderLayout());
+    
+    //arraylist<int[4]> [x1,y1,x2,y2] fgdhfdgxjhhhhhhhhhhhhhhhhhhhhhhhhhhhhh///////////////////////////////////////
+    ArrayList<int[]>  bishop1Attacks = new ArrayList<>();
+    ArrayList<int[]>  bishop1Moves = new ArrayList<>();
+    ArrayList<int[]>  bishop2Moves = new ArrayList<>();
+    ArrayList<int[]>  bishop2Attacks = new ArrayList<>();
+    ArrayList<int[]>  kingAttacks = new ArrayList<>();
+    ArrayList<int[]>  kingMoves = new ArrayList<>();
+    
 
     public GamePanel()
     {
@@ -671,6 +680,62 @@ class GamePanel extends JPanel
             
             return;
         }
+    }
+    
+    // returns arraylist of int[4] containing the x,y of the selected piece and the x,y of its destination
+    ArrayList<int[]> findAttacks(boolean isWhite, Corp corp, Piece[][] board) {
+        ArrayList<int[]> attacks = new ArrayList<>();
+        ArrayList<int[]> attackOptions = new ArrayList<>();
+        ArrayList<int[]> moves = new ArrayList<>();
+        // for every tile of the board...
+        for (int i = 0; i < board.length; i++)
+        {
+            for (int j = 0; j < board[i].length; j++)
+            {
+             // if piece belongs to respective team and its Corp has not acted...
+                if (board[i][j].charRep != '-' && isWhite ? Character.isUpperCase(board[i][j].charRep)
+                        : Character.isLowerCase(board[i][j].charRep) && !board[i][j].getCorp().getHasActed() && board[i][j].getCorp()==corp)
+                {                    
+                    
+                    // check for valid attacks
+                    attacks = board[i][j].searchValidActions(board, board[i][j].directions, false);
+                    for(int k = 0; k < attacks.size(); i++) {
+                        int[] temp = {i, j, attacks.get(k)[0], attacks.get(k)[1]};
+                        attackOptions.add(temp);
+                    }
+                    
+                }
+            }
+        }
+        return attackOptions;
+    }
+    
+    // returns arraylist of int[4] containing the x,y of the selected piece and the x,y of its destination
+    ArrayList<int[]> findMoves(boolean isWhite, Corp corp, Piece[][] board) {
+        ArrayList<int[]> moves = new ArrayList<>();
+        ArrayList<int[]> moveOptions = new ArrayList<>();
+        
+        // for every tile of the board...
+        for (int i = 0; i < board.length; i++)
+        {
+            for (int j = 0; j < board[i].length; j++)
+            {
+             // if piece belongs to respective team and its Corp has not acted...
+                if (board[i][j].charRep != '-' && isWhite ? Character.isUpperCase(board[i][j].charRep)
+                        : Character.isLowerCase(board[i][j].charRep) && !board[i][j].getCorp().getHasActed() && board[i][j].getCorp()==corp)
+                {                    
+                    
+                    // check for valid attacks
+                    moves = board[i][j].searchValidActions(board, board[i][j].directions, true);
+                    for(int k = 0; k < moves.size(); i++) {
+                        int[] temp = {i, j, moves.get(k)[0], moves.get(k)[1]};
+                        moveOptions.add(temp);
+                    }
+                    
+                }
+            }
+        }
+        return moveOptions;
     }
     
     //UPDATES GAMEFRAME TURN DISPLAY LABEL 
