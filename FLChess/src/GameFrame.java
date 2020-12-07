@@ -742,6 +742,319 @@ class GamePanel extends JPanel
         return moveOptions;
     }
     
+  public int[] score(ArrayList<int[]> location) {
+    	
+    	
+    	int[] highScoreCoordinates = new int[4];
+    	int highScore = 0;
+
+    	int[][] scoreTable = {
+    		{20,19,18,19,17,15},
+    		{20,19,18,19,17,15},
+    		{17,16,15,16,14,12},
+    		{18,17,16,17,15,13},
+    		{19,18,17,18,16,14},
+    		{15,14,13,14,12,10}
+    	};
+    	
+    	for(int i = 0; i < location.size(); i++) {
+    	switch(Character.toLowerCase(gBoard.tiles[location.get(i)[0]][location.get(i)[1]].charRep)) {
+    	case 'k':
+    		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
+    		case 'k':
+        		if(highScore < scoreTable[0][0]) {
+        			highScore = scoreTable[0][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+        		}
+        	case 'q':
+        		if(highScore < scoreTable[0][1]) {
+        			highScore = scoreTable[0][1];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'n':
+        		if(highScore < scoreTable[0][2]) {
+        			highScore = scoreTable[0][2];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'b':
+        		if(highScore < scoreTable[0][3]) {
+        			highScore = scoreTable[0][3];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'r':
+        		if(highScore < scoreTable[0][4]) {
+        			highScore = scoreTable[0][4];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+
+        	case 'p':
+        		if(highScore < scoreTable[0][5]) {
+        			highScore = scoreTable[0][5];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case '-':
+        		
+    		}
+    		return null;
+    	case 'q':
+    		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
+    		case 'k':
+        		if(highScore < scoreTable[1][0]) {
+        			highScore = scoreTable[1][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'q':
+        		if(highScore < scoreTable[1][1]) {
+        			highScore = scoreTable[1][1];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'n':
+        		if(highScore < scoreTable[1][2]) {
+        			highScore = scoreTable[1][2];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'b':
+        		if(highScore < scoreTable[1][3]) {
+        			highScore = scoreTable[1][3];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'r':
+        		if(highScore < scoreTable[1][4]) {
+        			highScore = scoreTable[1][4];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+
+        	case 'p':
+        		if(highScore < scoreTable[1][5]) {
+        			highScore = scoreTable[1][5];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+    		}
+    		return null;
+    	
+    	
+    	case 'n':
+    		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
+    		case 'k':
+        		if(highScore < scoreTable[2][0]) {
+        			highScore = scoreTable[2][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'q':
+        		if(highScore < scoreTable[2][1]) {
+        			highScore = scoreTable[2][1];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'n':
+        		if(highScore < scoreTable[2][2]) {
+        			highScore = scoreTable[2][2];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'b':
+        		if(highScore < scoreTable[2][3]) {
+        			highScore = scoreTable[2][3];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'r':
+        		if(highScore < scoreTable[2][4]) {
+        			highScore = scoreTable[2][4];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+
+        	case 'p':
+        		if(highScore < scoreTable[2][5]) {
+        			highScore = scoreTable[2][5];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+    		}
+    		return null;
+    		
+    	case 'b':
+    		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
+    		case 'k':
+        		if(highScore < scoreTable[3][0]) {
+        			highScore = scoreTable[3][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'q':
+        		if(highScore < scoreTable[3][1]) {
+        			highScore = scoreTable[3][1];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'n':
+        		if(highScore < scoreTable[3][2]) {
+        			highScore = scoreTable[3][2];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'b':
+        		if(highScore < scoreTable[3][3]) {
+        			highScore = scoreTable[3][3];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'r':
+        		if(highScore < scoreTable[3][4]) {
+        			highScore = scoreTable[3][4];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+
+        	case 'p':
+        		if(highScore < scoreTable[3][5]) {
+        			highScore = scoreTable[3][5];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+    		}
+    		return null;
+    		
+    	case 'r':
+    		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
+    		case 'k':
+        		if(highScore < scoreTable[4][0]) {
+        			highScore = scoreTable[4][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'q':
+        		if(highScore < scoreTable[4][1]) {
+        			highScore = scoreTable[4][1];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'n':
+        		if(highScore < scoreTable[4][2]) {
+        			highScore = scoreTable[4][2];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'b':
+        		if(highScore < scoreTable[4][3]) {
+        			highScore = scoreTable[4][3];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'r':
+        		if(highScore < scoreTable[4][4]) {
+        			highScore = scoreTable[4][4];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+
+        	case 'p':
+        		if(highScore < scoreTable[4][5]) {
+        			highScore = scoreTable[4][5];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+    		}
+    		return null;
+    	case 'p':
+    		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
+    		case 'k':
+        		if(highScore < scoreTable[5][0]) {
+        			highScore = scoreTable[5][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'q':
+        		if(highScore < scoreTable[5][1]) {
+        			highScore = scoreTable[5][1];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'n':
+        		if(highScore < scoreTable[5][2]) {
+        			highScore = scoreTable[5][2];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'b':
+        		if(highScore < scoreTable[5][3]) {
+        			highScore = scoreTable[5][3];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+        	case 'r':
+        		if(highScore < scoreTable[5][4]) {
+        			highScore = scoreTable[5][4];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+
+        	case 'p':
+        		if(highScore < scoreTable[5][5]) {
+        			highScore = scoreTable[5][5];
+        			highScoreCoordinates = location.get(i);
+        			break;
+
+        		}
+    		}
+    		return null;
+    	}
+    	
+    	}
+    	
+    	
+		return highScoreCoordinates;
+    	
+    }
+    
     //UPDATES GAMEFRAME TURN DISPLAY LABEL 
     public void changeTurnDisplay()
     {

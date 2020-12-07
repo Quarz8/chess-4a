@@ -12,6 +12,23 @@ public class AI
     {
         goodBoyPoints = 0;
     }
+    
+    public int score(ArrayList<Integer> location) {
+    	
+
+    	int[][] AttackTable = {
+    			{0,0,0,0,0,0},
+    			{0,0,0,0,0,0},
+    			{0,0,0,0,0,0},
+    			{0,0,0,0,0,0},
+    			{0,0,0,0,0,0},
+    			{0,0,0,0,0,0},
+    	};
+    	
+    	
+		return 0;
+    	
+    }
 
     public AI(boolean white)
     {
