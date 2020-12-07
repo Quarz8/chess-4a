@@ -52,7 +52,9 @@ public abstract class Piece
     {
 
     }
-
+    public char getChar(Piece piece) {
+    	return piece.charRep;
+    }
     public ArrayList<int[]> searchValidActions(Piece[][] tiles, int[][] directions, boolean move)
     /*
      * basically a breadth-first searching algorithm.
