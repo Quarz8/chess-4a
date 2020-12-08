@@ -521,20 +521,24 @@ class GamePanel extends JPanel
             actionsBB2.addAll(findMoves(false, gBoard.corpBB2, gBoard.tiles));
             actionsKB.addAll(findMoves(false, gBoard.corpKB, gBoard.tiles));
             System.out.println("FOUND MOVES");
-            
+            if(actionsBB1.size()!=0)
             actionsScored.add(score(actionsBB1));
+            if(actionsBB2.size()!=0)
             actionsScored.add(score(actionsBB2));
+            if(actionsKB.size()!=0)
             actionsScored.add(score(actionsKB));
-            System.out.println("SCORED MOVES ONCE" + actionsScored.get(2)[0]);
+          //  System.out.println("SCORED MOVES ONCE" + actionsScored.get(1)[0]);
             bestAction = score(actionsScored);
-            System.out.println("FOUND BEST MOVE");
-            System.out.println(bestAction[0] + " " + bestAction[1] + " " + bestAction[2]+ " " + bestAction[3]);
-            handleAiSelection(gBoard.tiles[bestAction[0]][bestAction[1]]);
-            handleAiSelection(gBoard.tiles[bestAction[2]][bestAction[3]]);
             
-            actionsBB1.clear();
-            actionsBB2.clear();
-            actionsKB.clear();
+            System.out.println("FOUND BEST MOVE");
+           System.out.println(bestAction[0] + " " + bestAction[1] + " " + bestAction[2]+ " " + bestAction[3]);
+          handleAiSelection(gBoard.tiles[bestAction[0]][bestAction[1]]);
+           handleAiSelection(gBoard.tiles[bestAction[2]][bestAction[3]]);
+            
+            //actionsBB1.clear();
+            //actionsBB2.clear();
+            //actionsKB.clear();
+            //actionsScored.clear();
         }
             //scanBoard(false, gBoard.tiles);
     }
@@ -834,7 +838,7 @@ class GamePanel extends JPanel
                     // check for valid moves
                     moves = board[i][j].searchValidActions(board, board[i][j].directions, true); 
                     for(int k = 0; k < moves.size(); k++) { System.out.println("IN INNER LOOP");System.out.println(moveOptions.size());
-                        int[] temp = {i, j, moves.get(k)[0], moves.get(k)[1]}; System.out.println(k + "CREATED TEMP INT[]");
+                        int[] temp = {i, j, moves.get(k)[0], moves.get(k)[1]}; System.out.println(k + " CREATED TEMP INT[]");
                         moveOptions.add(temp);
                     }
                     
