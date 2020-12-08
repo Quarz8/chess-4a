@@ -758,12 +758,13 @@ class GamePanel extends JPanel
     	int highScore = 0;
 
     	int[][] scoreTable = {
-    		{20,19,18,19,17,15},
-    		{20,19,18,19,17,15},
-    		{17,16,15,16,14,12},
-    		{18,17,16,17,15,13},
-    		{19,18,17,18,16,14},
-    		{15,14,13,14,12,10}
+    		{1950,1564,1600,1750,1420,1800},
+    		{2000,1620,1725,1833,1516,1900},
+    		{1680,1233,1375,1480,1150,1532},
+    		{1775,1325,1400,1548,1267,1640},
+    		{1867,1460,1500,1660,1300,1700},
+    		{1580,1100,1200,1350,1000,1440},
+    		{900}
     	};
     	
     	for(int i = 0; i < location.size(); i++) {
@@ -813,7 +814,11 @@ class GamePanel extends JPanel
 
         		}
         	case '-':
-        		
+        		if(highScore < scoreTable[6][0]) {
+        			highScore = scoreTable[6][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+        		}
     		}
     		return null;
     	case 'q':
@@ -861,6 +866,13 @@ class GamePanel extends JPanel
         			break;
 
         		}
+        	case '-':
+        		if(highScore < scoreTable[6][0]) {
+        			highScore = scoreTable[6][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+        		}
+    		
     		}
     		return null;
     	
@@ -910,6 +922,13 @@ class GamePanel extends JPanel
         			break;
 
         		}
+        	case '-':
+        		if(highScore < scoreTable[6][0]) {
+        			highScore = scoreTable[6][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+        		}
+    		
     		}
     		return null;
     		
@@ -958,6 +977,14 @@ class GamePanel extends JPanel
         			break;
 
         		}
+        		
+        	case '-':
+        		if(highScore < scoreTable[6][0]) {
+        			highScore = scoreTable[6][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+        		}
+    		
     		}
     		return null;
     		
@@ -1006,6 +1033,14 @@ class GamePanel extends JPanel
         			break;
 
         		}
+        		
+        	case '-':
+        		if(highScore < scoreTable[6][0]) {
+        			highScore = scoreTable[6][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+        		}
+    		
     		}
     		return null;
     	case 'p':
@@ -1053,6 +1088,14 @@ class GamePanel extends JPanel
         			break;
 
         		}
+        		
+        	case '-':
+        		if(highScore < scoreTable[6][0]) {
+        			highScore = scoreTable[6][0];
+        			highScoreCoordinates = location.get(i);
+        			break;
+        		}
+    		
     		}
     		return null;
     	}
