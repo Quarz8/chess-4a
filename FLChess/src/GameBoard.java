@@ -73,6 +73,15 @@ public class GameBoard
             }
         }
     }
+    
+    public GameBoard(Piece[][] tempTiles, boolean tempWhiteMoving) {
+        this.whiteMoving = tempWhiteMoving;
+        for (int row = 0; row < tiles.length; row++) {
+            for (int column = 0; column < tiles[row].length; column++) {
+                tiles[row][column] = tempTiles[row][column];
+            }
+        }
+    }
 
     public void movePiece(int[] before, int[] after)
             //Takes in a size-two array in the form of {row, column}

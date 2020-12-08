@@ -164,7 +164,7 @@ public class GameFrame extends JFrame implements ActionListener
             
             // start (black) AI's turn
             if(!game.gBoard.whiteMoving)
-            for(int i=0; i<game.gBoard.maxActionsBlack; i++)
+            while(!game.gBoard.whiteMoving && game.gBoard.actionsTaken < game.gBoard.maxActionsBlack)
                 game.scanBoard(false, game.gBoard.tiles);
         	
         	 // DISPLAY WHOSE TURN IT IS AFTER SKIP
@@ -244,6 +244,9 @@ class GamePanel extends JPanel
     ArrayList<int[]>  bishop2Attacks = new ArrayList<>();
     ArrayList<int[]>  kingAttacks = new ArrayList<>();
     ArrayList<int[]>  kingMoves = new ArrayList<>();
+    
+    boolean whiteVictory = false;
+    boolean blackVictory = false;
     
 
     public GamePanel()
@@ -405,7 +408,7 @@ class GamePanel extends JPanel
 
                     if (piece.tryAttack(selectedTile.pieceAt, selectedTile2.pieceAt, selectedTile.pieceAt.hasMoved)) // if attack succeeds...
                     {
-                    	
+                    	// check if captured piece was bishop
                     	if(selectedTile2.pieceAt.charRep == 'b') {
                         	
                         	Corp tempCorp1 = selectedTile2.pieceAt.corp;
@@ -429,6 +432,11 @@ class GamePanel extends JPanel
                             
                     		gBoard.maxActionsWhite--;
                     	}
+                    	// check if captured piece was king
+                    	if(selectedTile2.pieceAt.charRep == 'k')
+                    	    whiteVictory = true;
+                    	else if(selectedTile2.pieceAt.charRep == 'K')
+                    	    blackVictory = true;
                     	
                     	if(gBoard.tiles[prevLoc[0]][prevLoc[1]].charRep=='r' || gBoard.tiles[prevLoc[0]][prevLoc[1]].charRep=='R') {
                             gBoard.tiles[newLoc[0]][newLoc[1]]=new NullPiece(newLoc[0], newLoc[1]);
@@ -469,11 +477,36 @@ class GamePanel extends JPanel
 
         this.updateBoard(gBoard);
         
-        // start (black) AI's turn
+        if(whiteVictory == true) {
+            whiteVictory = false;
+            JPanel lmao = new JPanel();
+            JLabel text = new JLabel("Click OK to reset.");
+            lmao.add(text);
+            
+            JOptionPane.showMessageDialog(null, lmao, "White Wins!", JOptionPane.PLAIN_MESSAGE);
+            
+            gBoard = new GameBoard();
+            this.updateBoard(gBoard);
+        }
+
+        if(blackVictory == true) {
+            blackVictory = false;
+            JPanel lmao = new JPanel();
+            JLabel text = new JLabel("Click OK to reset.");
+            lmao.add(text);
+            
+            JOptionPane.showMessageDialog(null, lmao, "Black Wins!", JOptionPane.PLAIN_MESSAGE);
+            
+            gBoard = new GameBoard();
+            this.updateBoard(gBoard);
+        }
+            
+            
+        
+     // start (black) AI's turn
         if(!gBoard.whiteMoving)
-            for(int i=0; i < gBoard.maxActionsBlack; i++) {
-                scanBoard(false, gBoard.tiles);
-            }
+        while(!gBoard.whiteMoving && gBoard.actionsTaken < gBoard.maxActionsBlack)
+            scanBoard(false, gBoard.tiles);
     }
     
  // HANDLES AI Piece SELECTION
@@ -595,6 +628,12 @@ class GamePanel extends JPanel
                             gBoard.maxActionsWhite--;
                         }
                         
+                        // check if captured piece was king
+                        if(selectedPiece2.charRep == 'k')
+                            whiteVictory = true;
+                        else if(selectedPiece2.charRep == 'K')
+                            blackVictory = true;
+                        
                         if(gBoard.tiles[prevLoc[0]][prevLoc[1]].charRep=='r' || gBoard.tiles[prevLoc[0]][prevLoc[1]].charRep=='R') {
                             gBoard.tiles[newLoc[0]][newLoc[1]]=new NullPiece(newLoc[0], newLoc[1]);
                         }
@@ -635,6 +674,30 @@ class GamePanel extends JPanel
         }
 
         this.updateBoard(gBoard);
+        
+        if(whiteVictory == true) {
+            whiteVictory = false;
+            JPanel lmao = new JPanel();
+            JLabel text = new JLabel("Click OK to reset.");
+            lmao.add(text);
+            
+            JOptionPane.showMessageDialog(null, lmao, "White Wins!", JOptionPane.PLAIN_MESSAGE);
+            
+            gBoard = new GameBoard();
+            this.updateBoard(gBoard);
+        }
+
+        if(blackVictory == true) {
+            blackVictory = false;
+            JPanel lmao = new JPanel();
+            JLabel text = new JLabel("Click OK to reset.");
+            lmao.add(text);
+            
+            JOptionPane.showMessageDialog(null, lmao, "Black Wins!", JOptionPane.PLAIN_MESSAGE);
+            
+            gBoard = new GameBoard();
+            this.updateBoard(gBoard);
+        }
     }
     
     // Checks every board tile and checks if it is null (-) AND on the AI's team AND
