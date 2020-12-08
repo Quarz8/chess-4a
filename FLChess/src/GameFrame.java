@@ -505,8 +505,38 @@ class GamePanel extends JPanel
         
      // start (black) AI's turn
         if(!gBoard.whiteMoving)
-        while(!gBoard.whiteMoving && gBoard.actionsTaken < gBoard.maxActionsBlack)
-            scanBoard(false, gBoard.tiles);
+        while(!gBoard.whiteMoving && gBoard.actionsTaken < gBoard.maxActionsBlack) {
+            System.out.println("BLACK AI TURN STARTED");
+            ArrayList<int []> actionsBB1 = new ArrayList<>();
+            ArrayList<int []> actionsBB2 = new ArrayList<>();
+            ArrayList<int []> actionsKB = new ArrayList<>();
+            ArrayList<int []> actionsScored = new ArrayList<>();
+            int[] bestAction = new int[4];
+            
+            actionsBB1.addAll(findAttacks(false, gBoard.corpBB1, gBoard.tiles));
+            actionsBB2.addAll(findAttacks(false, gBoard.corpBB2, gBoard.tiles));
+            actionsKB.addAll(findAttacks(false, gBoard.corpKB, gBoard.tiles));
+            System.out.println("FOUND ATTACKS");
+            actionsBB1.addAll(findMoves(false, gBoard.corpBB1, gBoard.tiles));
+            actionsBB2.addAll(findMoves(false, gBoard.corpBB2, gBoard.tiles));
+            actionsKB.addAll(findMoves(false, gBoard.corpKB, gBoard.tiles));
+            System.out.println("FOUND MOVES");
+            
+            actionsScored.add(score(actionsBB1));
+            actionsScored.add(score(actionsBB2));
+            actionsScored.add(score(actionsKB));
+            System.out.println("SCORED MOVES ONCE" + actionsScored.get(2)[0]);
+            bestAction = score(actionsScored);
+            System.out.println("FOUND BEST MOVE");
+            System.out.println(bestAction[0] + " " + bestAction[1] + " " + bestAction[2]+ " " + bestAction[3]);
+            handleAiSelection(gBoard.tiles[bestAction[0]][bestAction[1]]);
+            handleAiSelection(gBoard.tiles[bestAction[2]][bestAction[3]]);
+            
+            actionsBB1.clear();
+            actionsBB2.clear();
+            actionsKB.clear();
+        }
+            //scanBoard(false, gBoard.tiles);
     }
     
  // HANDLES AI Piece SELECTION
@@ -762,7 +792,7 @@ class GamePanel extends JPanel
     ArrayList<int[]> findAttacks(boolean isWhite, Corp corp, Piece[][] board) {
         ArrayList<int[]> attacks = new ArrayList<>();
         ArrayList<int[]> attackOptions = new ArrayList<>();
-        ArrayList<int[]> moves = new ArrayList<>();
+        System.out.println("IN FIND ATTACKS");
         // for every tile of the board...
         for (int i = 0; i < board.length; i++)
         {
@@ -772,10 +802,10 @@ class GamePanel extends JPanel
                 if (board[i][j].charRep != '-' && isWhite ? Character.isUpperCase(board[i][j].charRep)
                         : Character.isLowerCase(board[i][j].charRep) && !board[i][j].getCorp().getHasActed() && board[i][j].getCorp()==corp)
                 {                    
-                    
+                    System.out.println("IN IF STATEMENT");
                     // check for valid attacks
                     attacks = board[i][j].searchValidActions(board, board[i][j].directions, false);
-                    for(int k = 0; k < attacks.size(); i++) {
+                    for(int k = 0; k < attacks.size(); k++) {
                         int[] temp = {i, j, attacks.get(k)[0], attacks.get(k)[1]};
                         attackOptions.add(temp);
                     }
@@ -790,7 +820,7 @@ class GamePanel extends JPanel
     ArrayList<int[]> findMoves(boolean isWhite, Corp corp, Piece[][] board) {
         ArrayList<int[]> moves = new ArrayList<>();
         ArrayList<int[]> moveOptions = new ArrayList<>();
-        
+        System.out.println("IN FINDMOVES");
         // for every tile of the board...
         for (int i = 0; i < board.length; i++)
         {
@@ -800,11 +830,11 @@ class GamePanel extends JPanel
                 if (board[i][j].charRep != '-' && isWhite ? Character.isUpperCase(board[i][j].charRep)
                         : Character.isLowerCase(board[i][j].charRep) && !board[i][j].getCorp().getHasActed() && board[i][j].getCorp()==corp)
                 {                    
-                    
-                    // check for valid attacks
-                    moves = board[i][j].searchValidActions(board, board[i][j].directions, true);
-                    for(int k = 0; k < moves.size(); i++) {
-                        int[] temp = {i, j, moves.get(k)[0], moves.get(k)[1]};
+                    System.out.println("IN IF STATEMENT");
+                    // check for valid moves
+                    moves = board[i][j].searchValidActions(board, board[i][j].directions, true); 
+                    for(int k = 0; k < moves.size(); k++) { System.out.println("IN INNER LOOP");System.out.println(moveOptions.size());
+                        int[] temp = {i, j, moves.get(k)[0], moves.get(k)[1]}; System.out.println(k + "CREATED TEMP INT[]");
                         moveOptions.add(temp);
                     }
                     
@@ -882,8 +912,9 @@ class GamePanel extends JPanel
         			highScoreCoordinates = location.get(i);
         			break;
         		}
+
     		}
-    		return null;
+    		
     	case 'q':
     		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
     		case 'k':
@@ -935,9 +966,9 @@ class GamePanel extends JPanel
         			highScoreCoordinates = location.get(i);
         			break;
         		}
-    		
+
     		}
-    		return null;
+    		
     	
     	
     	case 'n':
@@ -991,9 +1022,9 @@ class GamePanel extends JPanel
         			highScoreCoordinates = location.get(i);
         			break;
         		}
-    		
+
     		}
-    		return null;
+    		
     		
     	case 'b':
     		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
@@ -1047,9 +1078,9 @@ class GamePanel extends JPanel
         			highScoreCoordinates = location.get(i);
         			break;
         		}
-    		
+
     		}
-    		return null;
+    		
     		
     	case 'r':
     		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
@@ -1105,7 +1136,7 @@ class GamePanel extends JPanel
         		}
     		
     		}
-    		return null;
+
     	case 'p':
     		switch(gBoard.tiles[location.get(i)[2]][location.get(i)[3]].charRep) {
     		case 'k':
@@ -1160,10 +1191,11 @@ class GamePanel extends JPanel
         		}
     		
     		}
-    		return null;
+
     	}
     	
     	}
+    	System.out.println("inside score function " + highScoreCoordinates[0]+ highScoreCoordinates[1]+ highScoreCoordinates[2]+ highScoreCoordinates[3]);
     	
     	
 		return highScoreCoordinates;
