@@ -162,10 +162,41 @@ public class GameFrame extends JFrame implements ActionListener
             game.highlightedAttackTiles.clear();
             game.updateBoard(game.gBoard);
             
-            // start (black) AI's turn
+         // start (black) AI's turn
             if(!game.gBoard.whiteMoving)
-            while(!game.gBoard.whiteMoving && game.gBoard.actionsTaken < game.gBoard.maxActionsBlack)
-                game.scanBoard(false, game.gBoard.tiles);
+            while(!game.gBoard.whiteMoving && game.gBoard.actionsTaken < game.gBoard.maxActionsBlack) {
+                System.out.println("BLACK AI TURN STARTED");
+                ArrayList<int []> actionsBB1 = new ArrayList<>();
+                ArrayList<int []> actionsBB2 = new ArrayList<>();
+                ArrayList<int []> actionsKB = new ArrayList<>();
+                ArrayList<int []> actionsScored = new ArrayList<>();
+                int[] bestAction = new int[4];
+                
+                actionsBB1.addAll(game.findAttacks(false, game.gBoard.corpBB1, game.gBoard.tiles));
+                actionsBB2.addAll(game.findAttacks(false, game.gBoard.corpBB2, game.gBoard.tiles));
+                actionsKB.addAll(game.findAttacks(false, game.gBoard.corpKB, game.gBoard.tiles));
+                
+                System.out.println("FOUND ATTACKS");
+                actionsBB1.addAll(game.findMoves(false, game.gBoard.corpBB1, game.gBoard.tiles));
+                actionsBB2.addAll(game.findMoves(false, game.gBoard.corpBB2, game.gBoard.tiles));
+                actionsKB.addAll(game.findMoves(false, game.gBoard.corpKB, game.gBoard.tiles));
+                System.out.println("FOUND MOVES");
+                if(actionsBB1.size()!=0)
+                actionsScored.add(game.score(actionsBB1));
+                if(actionsBB2.size()!=0)
+                actionsScored.add(game.score(actionsBB2));
+                if(actionsKB.size()!=0)
+                actionsScored.add(game.score(actionsKB));
+
+                bestAction = game.score(actionsScored);
+                
+               System.out.println("FOUND BEST MOVE");
+               System.out.println(bestAction[0] + " " + bestAction[1] + " " + bestAction[2]+ " " + bestAction[3]);
+               
+               game.handleAiSelection(game.gBoard.tiles[bestAction[0]][bestAction[1]]);
+               game.handleAiSelection(game.gBoard.tiles[bestAction[2]][bestAction[3]]);
+                
+            }
         	
         	 // DISPLAY WHOSE TURN IT IS AFTER SKIP
             game.changeTurnDisplay();
@@ -516,8 +547,7 @@ class GamePanel extends JPanel
             actionsBB1.addAll(findAttacks(false, gBoard.corpBB1, gBoard.tiles));
             actionsBB2.addAll(findAttacks(false, gBoard.corpBB2, gBoard.tiles));
             actionsKB.addAll(findAttacks(false, gBoard.corpKB, gBoard.tiles));
-            //for(int i=0; i<actionsKB.size(); i++)
-              //  System.out.println("Attakies???"+actionsKB.get(i)[0]+" "+actionsKB.get(i)[1]+" "+actionsKB.get(i)[2]+" "+actionsKB.get(i)[3]);
+            
             System.out.println("FOUND ATTACKS");
             actionsBB1.addAll(findMoves(false, gBoard.corpBB1, gBoard.tiles));
             actionsBB2.addAll(findMoves(false, gBoard.corpBB2, gBoard.tiles));
@@ -532,17 +562,13 @@ class GamePanel extends JPanel
 
             bestAction = score(actionsScored);
             
-            System.out.println("FOUND BEST MOVE");
+           System.out.println("FOUND BEST MOVE");
            System.out.println(bestAction[0] + " " + bestAction[1] + " " + bestAction[2]+ " " + bestAction[3]);
-          handleAiSelection(gBoard.tiles[bestAction[0]][bestAction[1]]);
+           
+           handleAiSelection(gBoard.tiles[bestAction[0]][bestAction[1]]);
            handleAiSelection(gBoard.tiles[bestAction[2]][bestAction[3]]);
             
-            //actionsBB1.clear();
-            //actionsBB2.clear();
-            //actionsKB.clear();
-            //actionsScored.clear();
         }
-            //scanBoard(false, gBoard.tiles);
     }
     
  // HANDLES AI Piece SELECTION
