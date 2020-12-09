@@ -176,11 +176,10 @@ public class GameFrame extends JFrame implements ActionListener
                 actionsBB2.addAll(game.findAttacks(false, game.gBoard.corpBB2, game.gBoard.tiles));
                 actionsKB.addAll(game.findAttacks(false, game.gBoard.corpKB, game.gBoard.tiles));
                 
-                System.out.println("FOUND ATTACKS");
                 actionsBB1.addAll(game.findMoves(false, game.gBoard.corpBB1, game.gBoard.tiles));
                 actionsBB2.addAll(game.findMoves(false, game.gBoard.corpBB2, game.gBoard.tiles));
                 actionsKB.addAll(game.findMoves(false, game.gBoard.corpKB, game.gBoard.tiles));
-                System.out.println("FOUND MOVES");
+
                 if(actionsBB1.size()!=0)
                 actionsScored.add(game.score(actionsBB1));
                 if(actionsBB2.size()!=0)
@@ -189,9 +188,6 @@ public class GameFrame extends JFrame implements ActionListener
                 actionsScored.add(game.score(actionsKB));
 
                 bestAction = game.score(actionsScored);
-                
-               System.out.println("FOUND BEST MOVE");
-               System.out.println(bestAction[0] + " " + bestAction[1] + " " + bestAction[2]+ " " + bestAction[3]);
                
                game.handleAiSelection(game.gBoard.tiles[bestAction[0]][bestAction[1]]);
                game.handleAiSelection(game.gBoard.tiles[bestAction[2]][bestAction[3]]);
@@ -548,11 +544,10 @@ class GamePanel extends JPanel
             actionsBB2.addAll(findAttacks(false, gBoard.corpBB2, gBoard.tiles));
             actionsKB.addAll(findAttacks(false, gBoard.corpKB, gBoard.tiles));
             
-            System.out.println("FOUND ATTACKS");
             actionsBB1.addAll(findMoves(false, gBoard.corpBB1, gBoard.tiles));
             actionsBB2.addAll(findMoves(false, gBoard.corpBB2, gBoard.tiles));
             actionsKB.addAll(findMoves(false, gBoard.corpKB, gBoard.tiles));
-            System.out.println("FOUND MOVES");
+
             if(actionsBB1.size()!=0)
             actionsScored.add(score(actionsBB1));
             if(actionsBB2.size()!=0)
@@ -562,9 +557,6 @@ class GamePanel extends JPanel
 
             bestAction = score(actionsScored);
             
-           System.out.println("FOUND BEST MOVE");
-           System.out.println(bestAction[0] + " " + bestAction[1] + " " + bestAction[2]+ " " + bestAction[3]);
-           
            handleAiSelection(gBoard.tiles[bestAction[0]][bestAction[1]]);
            handleAiSelection(gBoard.tiles[bestAction[2]][bestAction[3]]);
             
@@ -824,7 +816,7 @@ class GamePanel extends JPanel
     ArrayList<int[]> findAttacks(boolean isWhite, Corp corp, Piece[][] board) {
         ArrayList<int[]> attacks = new ArrayList<>();
         ArrayList<int[]> attackOptions = new ArrayList<>();
-        System.out.println("IN FIND ATTACKS");
+
         // for every tile of the board...
         for (int i = 0; i < board.length; i++)
         {
@@ -834,7 +826,6 @@ class GamePanel extends JPanel
                 if (board[i][j].charRep != '-' && isWhite ? Character.isUpperCase(board[i][j].charRep)
                         : Character.isLowerCase(board[i][j].charRep) && !board[i][j].getCorp().getHasActed() && board[i][j].getCorp()==corp)
                 {                    
-                    System.out.println("IN IF STATEMENT");
                     // check for valid attacks
                     attacks = board[i][j].searchValidActions(board, board[i][j].directions, false);
                     for(int k = 0; k < attacks.size(); k++) {
@@ -852,7 +843,7 @@ class GamePanel extends JPanel
     ArrayList<int[]> findMoves(boolean isWhite, Corp corp, Piece[][] board) {
         ArrayList<int[]> moves = new ArrayList<>();
         ArrayList<int[]> moveOptions = new ArrayList<>();
-        System.out.println("IN FINDMOVES");
+
         // for every tile of the board...
         for (int i = 0; i < board.length; i++)
         {
@@ -862,11 +853,10 @@ class GamePanel extends JPanel
                 if (board[i][j].charRep != '-' && isWhite ? Character.isUpperCase(board[i][j].charRep)
                         : Character.isLowerCase(board[i][j].charRep) && !board[i][j].getCorp().getHasActed() && board[i][j].getCorp()==corp)
                 {                    
-                    System.out.println("IN IF STATEMENT");
                     // check for valid moves
                     moves = board[i][j].searchValidActions(board, board[i][j].directions, true); 
-                    for(int k = 0; k < moves.size(); k++) { System.out.println("IN INNER LOOP");System.out.println(moveOptions.size());
-                        int[] temp = {i, j, moves.get(k)[0], moves.get(k)[1]}; System.out.println(k + " CREATED TEMP INT[]");
+                    for(int k = 0; k < moves.size(); k++) { 
+                        int[] temp = {i, j, moves.get(k)[0], moves.get(k)[1]};
                         moveOptions.add(temp);
                     }
                     
@@ -883,12 +873,12 @@ class GamePanel extends JPanel
     	int highScore = 0;
 
     	int[][] scoreTable = {
-    		{1950,1564,1600,1750,1420,1800},
-    		{2000,1620,1725,1833,1516,1900},
-    		{1680,1233,1375,1480,1150,1532},
-    		{1775,1325,1400,1548,1267,1640},
-    		{1867,1460,1500,1660,1300,1700},
-    		{1580,1100,1200,1350,1000,1440},
+    		{1950,1900,1420,1750,1600,1564},
+    		{2000,1833,1516,1620,1800,1725},
+    		{1532,1150,1233,1480,1375,1680},
+    		{1775,1325,1267,1640,1400,1548},
+    		{1867,1700,1500,1660,1460,1300},
+    		{1580,1100,1000,1440,1200,1350},
     		{900}
     	};
     	
@@ -1227,8 +1217,7 @@ class GamePanel extends JPanel
     	}
     	
     	}
-    	System.out.println("inside score function " + highScoreCoordinates[0]+ highScoreCoordinates[1]+ highScoreCoordinates[2]+ highScoreCoordinates[3]);
-    	
+    	    	
     	
 		return highScoreCoordinates;
     	
